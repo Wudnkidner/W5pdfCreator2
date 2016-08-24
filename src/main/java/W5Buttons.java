@@ -1,13 +1,6 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class W5Buttons {
@@ -43,8 +36,30 @@ public class W5Buttons {
 	
 	public static Button setCreateJudgeBtn (final Stage stage) {
 		Button createJudge = new Button();
+
+		createJudge.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				W5CreateJudgeStage.setCreateJudgeStage(stage);
+			}
+		});
+
 		createJudge.setText("Create judge");
 		return createJudge;
+	}
+
+	static Button setCreateFightBtn (final Stage stage) {
+		Button createFight = new Button();
+
+		createFight.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				W5CreateFightStage.setCreateFightsStage(stage);
+			}
+		});
+
+		createFight.setText("Create fight");
+		return createFight;
 	}
 	
 	public static Button setBackBtn(final Stage stage) {
