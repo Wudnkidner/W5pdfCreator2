@@ -35,7 +35,9 @@ public class W5CreateFightStage {
 		Scene scene = new Scene(gp);
 		stage.setScene(scene);
 		stage.show();
-		
+
+
+
 		
 	}
 
