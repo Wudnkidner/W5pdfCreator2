@@ -28,7 +28,7 @@ public class W5CreateFighterStage {
 		gp.addRow(1, new Label("Last name: "), lastName);
 		gp.addRow(2, new Label("Country: "), country);
 		gp.addRow(3, new Label("Weight: "), weight);
-		gp.addRow(4, new Label(""), W5Buttons.setSaveFighterBtn(stage));
+		gp.addRow(4, new Label(""), W5Buttons.setSaveFighterBtn());
 		gp.addRow(5, new Label(""), W5Buttons.setBackBtn(stage));
 
 

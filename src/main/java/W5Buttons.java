@@ -84,7 +84,7 @@ public class W5Buttons {
 
 
 	//Save buttons
-	public static Button setSaveTournamentBtn(final String tournament, final String city, final String place, final String date) {
+	public static Button setSaveTournamentBtn() {
 		final Button saveTournament = new Button();
 		saveTournament.setText("Save");
 
@@ -92,7 +92,8 @@ public class W5Buttons {
 
 			@Override
 			public void handle(ActionEvent event) {
-			Connection conn = W5MySQLConnection.getConnection();
+				if (W5CreateTournamentStage.getTournamentCityText().length() > 0) {
+				Connection conn = W5MySQLConnection.getConnection();
 				PreparedStatement insertNewRow;
 				String insertString =
 						"INSERT INTO Tournaments"+
@@ -101,19 +102,21 @@ public class W5Buttons {
 								"(?,?,?,?)";
 
 				try {
-					insertNewRow = conn.prepareStatement(insertString);
-					insertNewRow.setString(1,tournament);
-					insertNewRow.setString(2,city);
-					insertNewRow.setString(3,place);
-					insertNewRow.setString(4,date);
-					System.out.println("1"+tournament+" "+"2"+city+"3"+place+"4"+date);
-					insertNewRow.execute();
-					conn.close();
-					System.out.println("Карамба!");
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 
+						insertNewRow = conn.prepareStatement(insertString);
+						insertNewRow.setString(1, W5CreateTournamentStage.getTournamentNameText());
+						insertNewRow.setString(2, W5CreateTournamentStage.getTournamentCityText());
+						insertNewRow.setString(3, W5CreateTournamentStage.getTournamentPlaceText());
+						insertNewRow.setString(4, W5CreateTournamentStage.getTournamentDateText());
+
+						insertNewRow.execute();
+						conn.close();
+						W5CreateTournamentStage.clearFlds();
+
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				}
 
 			}
 		});
@@ -121,7 +124,7 @@ public class W5Buttons {
 		return saveTournament;
 	}
 
-	public static Button setSaveFighterBtn(final Stage stage) {
+	public static Button setSaveFighterBtn() {
 		Button saveFighter = new Button();
 		saveFighter.setText("Save");
 
@@ -137,7 +140,7 @@ public class W5Buttons {
 		return saveFighter;
 	}
 
-	public static Button setSaveJudgeBtn(final Stage stage) {
+	public static Button setSaveJudgeBtn() {
 		Button saveJudge = new Button();
 		saveJudge.setText("Save");
 
@@ -145,7 +148,7 @@ public class W5Buttons {
 
 			@Override
 			public void handle(ActionEvent event) {
-				W5FirstScene.setFirstScene(stage);
+
 
 			}
 		});

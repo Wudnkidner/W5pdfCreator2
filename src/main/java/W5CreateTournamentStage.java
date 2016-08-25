@@ -20,6 +20,7 @@ public class W5CreateTournamentStage {
 
 	public static void setCreateTournamentStage (Stage stage) {
 
+
 		GridPane gp = new GridPane();
 		gp.setPrefSize(1024, 768);
 
@@ -27,7 +28,7 @@ public class W5CreateTournamentStage {
 		gp.addRow(1, new Label("City: "), cityFld);
 		gp.addRow(2, new Label("Place: "), placeFld);
 		gp.addRow(3, new Label("Date: "), dateFld);
-		gp.addRow(4, new Label(""),W5Buttons.setSaveTournamentBtn(tournamentFld.getText(), cityFld.getText(), placeFld.getText(), dateFld.getText()));
+		gp.addRow(4, new Label(""),W5Buttons.setSaveTournamentBtn());
 		gp.addRow(5, new Label(""),W5Buttons.setBackBtn(stage));
 
 
@@ -46,5 +47,30 @@ public class W5CreateTournamentStage {
 		
 		
 	}
-	
+
+
+	public static String getTournamentNameText () {
+		return tournamentFld.getText();
+	}
+
+	public static String getTournamentCityText () {
+		return cityFld.getText();
+	}
+
+	public static String getTournamentPlaceText () {
+		return placeFld.getText();
+	}
+
+	public static String getTournamentDateText () {
+		return dateFld.getText();
+	}
+
+	public static void clearFlds () {
+		tournamentFld.clear();
+		cityFld.clear();
+		placeFld.clear();
+		dateFld.clear();
+	}
 }
+
+
