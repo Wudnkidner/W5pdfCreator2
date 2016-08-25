@@ -27,7 +27,7 @@ public class W5CreateTournamentStage {
 		gp.addRow(1, new Label("City: "), cityFld);
 		gp.addRow(2, new Label("Place: "), placeFld);
 		gp.addRow(3, new Label("Date: "), dateFld);
-		gp.addRow(4, new Label(""),W5Buttons.setSaveTournamentBtn(stage));
+		gp.addRow(4, new Label(""),W5Buttons.setSaveTournamentBtn(tournamentFld.getText(), cityFld.getText(), placeFld.getText(), dateFld.getText()));
 		gp.addRow(5, new Label(""),W5Buttons.setBackBtn(stage));
 
 

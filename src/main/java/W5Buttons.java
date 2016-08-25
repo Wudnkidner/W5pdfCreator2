@@ -3,6 +3,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class W5Buttons {
 	
 	
@@ -80,15 +84,36 @@ public class W5Buttons {
 
 
 	//Save buttons
-	public static Button setSaveTournamentBtn(final Stage stage) {
-		Button saveTournament = new Button();
+	public static Button setSaveTournamentBtn(final String tournament, final String city, final String place, final String date) {
+		final Button saveTournament = new Button();
 		saveTournament.setText("Save");
 
 		saveTournament.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				W5FirstScene.setFirstScene(stage);
+			Connection conn = W5MySQLConnection.getConnection();
+				PreparedStatement insertNewRow;
+				String insertString =
+						"INSERT INTO Tournaments"+
+								"(name,city,place,date)"+
+								"VALUES"+
+								"(?,?,?,?)";
+
+				try {
+					insertNewRow = conn.prepareStatement(insertString);
+					insertNewRow.setString(1,tournament);
+					insertNewRow.setString(2,city);
+					insertNewRow.setString(3,place);
+					insertNewRow.setString(4,date);
+					System.out.println("1"+tournament+" "+"2"+city+"3"+place+"4"+date);
+					insertNewRow.execute();
+					conn.close();
+					System.out.println("Карамба!");
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
 
 			}
 		});
