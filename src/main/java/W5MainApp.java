@@ -1,20 +1,29 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
-/**
- * Created by albert on 24.08.16.
- */
 public class W5MainApp extends Application {
 
-    public static void main (String[] args) throws IOException {
-    Application.launch(args);
-    }
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+	
+	
+	public void start (Stage stage) {
+		
+		W5FirstScene.setFirstScene(stage);
+		
+	}
+	
 
-    @Override
-    public void start (final Stage stage) {
-        W5FirstPageJavaFX.firstPage(stage);
-    }
+	
 
+	
 }
