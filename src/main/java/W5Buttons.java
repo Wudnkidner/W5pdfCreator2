@@ -100,9 +100,6 @@ public class W5Buttons {
 								"(name,city,place,date)"+
 								"VALUES"+
 								"(?,?,?,?)";
-
-
-
 				try {
 
 						insertNewRow = conn.prepareStatement(insertString);
