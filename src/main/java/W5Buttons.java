@@ -92,7 +92,7 @@ public class W5Buttons {
 
 			@Override
 			public void handle(ActionEvent event) {
-				if (W5CreateTournamentStage.getTournamentCityText().length() > 0) {
+				if (W5CreateTournamentStage.getTournamentNameText().length() > 0 && W5CreateTournamentStage.getTournamentCityText().length() > 0 && W5CreateTournamentStage.getTournamentPlaceText().length() > 0 && W5CreateTournamentStage.getTournamentDateText().length() > 0) {
 				Connection conn = W5MySQLConnection.getConnection();
 				PreparedStatement insertNewRow;
 				String insertString =
@@ -115,6 +115,8 @@ public class W5Buttons {
 					}catch(SQLException e){
 						e.printStackTrace();
 					}
+				} else {
+					System.out.println("Пожалуйста заполните поля");
 				}
 
 			}
