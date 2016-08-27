@@ -12,10 +12,10 @@ import javafx.stage.Stage;
 
 public class W5CreateTournamentStage {
 
-	private static TextField tournamentFld = new TextField();
-	private static TextField cityFld = new TextField();
-	private static TextField placeFld = new TextField();
-	private static TextField dateFld = new TextField();
+	private static TextField tournamentTFld = new TextField();
+	private static TextField cityTFld = new TextField();
+	private static TextField placeTFld = new TextField();
+	private static TextField dateTFld = new TextField();
 
 
 	public static void setCreateTournamentStage (Stage stage) {
@@ -24,10 +24,10 @@ public class W5CreateTournamentStage {
 		GridPane gp = new GridPane();
 		gp.setPrefSize(1024, 768);
 
-		gp.addRow(0, new Label("Tournament name: "), tournamentFld);
-		gp.addRow(1, new Label("City: "), cityFld);
-		gp.addRow(2, new Label("Place: "), placeFld);
-		gp.addRow(3, new Label("Date: "), dateFld);
+		gp.addRow(0, new Label("Tournament name: "), tournamentTFld);
+		gp.addRow(1, new Label("City: "), cityTFld);
+		gp.addRow(2, new Label("Place: "), placeTFld);
+		gp.addRow(3, new Label("Date: "), dateTFld);
 		gp.addRow(4, new Label(""),W5Buttons.setSaveTournamentBtn());
 		gp.addRow(5, new Label(""),W5Buttons.setBackBtn(stage));
 
@@ -50,26 +50,26 @@ public class W5CreateTournamentStage {
 
 
 	public static String getTournamentNameText () {
-		return tournamentFld.getText();
+		return tournamentTFld.getText();
 	}
 
 	public static String getTournamentCityText () {
-		return cityFld.getText();
+		return cityTFld.getText();
 	}
 
 	public static String getTournamentPlaceText () {
-		return placeFld.getText();
+		return placeTFld.getText();
 	}
 
 	public static String getTournamentDateText () {
-		return dateFld.getText();
+		return dateTFld.getText();
 	}
 
-	public static void clearFlds () {
-		tournamentFld.clear();
-		cityFld.clear();
-		placeFld.clear();
-		dateFld.clear();
+	public static void clearTFlds () {
+		tournamentTFld.clear();
+		cityTFld.clear();
+		placeTFld.clear();
+		dateTFld.clear();
 	}
 }
 

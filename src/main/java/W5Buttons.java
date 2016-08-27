@@ -110,7 +110,7 @@ public class W5Buttons {
 
 						insertNewRow.execute();
 						conn.close();
-						W5CreateTournamentStage.clearFlds();
+						W5CreateTournamentStage.clearTFlds();
 
 					}catch(SQLException e){
 						e.printStackTrace();
@@ -134,6 +134,32 @@ public class W5Buttons {
 			@Override
 			public void handle(ActionEvent event) {
 
+				if (W5CreateFighterStage.getFirstNameText().length() > 0 && W5CreateFighterStage.getLastNameText().length() > 0 && W5CreateFighterStage.getCountryText().length() > 0 && W5CreateFighterStage.getWeightText().length() > 0) {
+					Connection conn = W5MySQLConnection.getConnection();
+					PreparedStatement insertNewRow;
+					String insertString =
+							"INSERT INTO Fighters"+
+									"(firstname,lastname,country,weight)"+
+									"VALUES"+
+									"(?,?,?,?)";
+					try {
+
+						insertNewRow = conn.prepareStatement(insertString);
+						insertNewRow.setString(1, W5CreateFighterStage.getFirstNameText());
+						insertNewRow.setString(2, W5CreateFighterStage.getLastNameText());
+						insertNewRow.setString(3, W5CreateFighterStage.getCountryText());
+						insertNewRow.setString(4, W5CreateFighterStage.getWeightText());
+
+						insertNewRow.execute();
+						conn.close();
+						W5CreateFighterStage.clearTFlds();
+
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				} else {
+					System.out.println("Пожалуйста заполните поля");
+				}
 
 			}
 		});
@@ -150,6 +176,31 @@ public class W5Buttons {
 			@Override
 			public void handle(ActionEvent event) {
 
+				if (W5CreateJudgeStage.getFirstNameText().length() > 0 && W5CreateJudgeStage.getLastNameText().length() > 0 && W5CreateJudgeStage.getCountryText().length() > 0 ) {
+					Connection conn = W5MySQLConnection.getConnection();
+					PreparedStatement insertNewRow;
+					String insertString =
+							"INSERT INTO Judges"+
+									"(firstname,lastname,country)"+
+									"VALUES"+
+									"(?,?,?)";
+					try {
+
+						insertNewRow = conn.prepareStatement(insertString);
+						insertNewRow.setString(1, W5CreateJudgeStage.getFirstNameText());
+						insertNewRow.setString(2, W5CreateJudgeStage.getLastNameText());
+						insertNewRow.setString(3, W5CreateJudgeStage.getCountryText());
+
+						insertNewRow.execute();
+						conn.close();
+						W5CreateJudgeStage.clearTFlds();
+
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				} else {
+					System.out.println("Пожалуйста заполните поля");
+				}
 
 			}
 		});
