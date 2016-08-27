@@ -43,6 +43,7 @@ public class W5CreateTournamentStage {
 
 		Scene scene = new Scene(gp);
 		stage.setScene(scene);
+		stage.centerOnScreen();
 		stage.show();
 		
 		

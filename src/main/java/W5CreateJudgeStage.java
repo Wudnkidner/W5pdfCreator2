@@ -27,10 +27,11 @@ public class W5CreateJudgeStage {
 		gp.addRow(0, new Label("First name: "), firstNameTFld);
 		gp.addRow(1, new Label("Last name: "), lastNameTFld);
 		gp.addRow(2, new Label("Country: "), countryTFld);
-		gp.addRow(3, new Label(""), W5Buttons.setSaveFighterBtn());
+		gp.addRow(3, new Label(""), W5Buttons.setSaveJudgeBtn());
 		gp.addRow(4, new Label(""), W5Buttons.setBackBtn(stage));
 		Scene scene = new Scene(gp);
 		stage.setScene(scene);
+		stage.centerOnScreen();
 		stage.show();
 		
 		
