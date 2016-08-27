@@ -19,7 +19,7 @@ public class W5FightsData {
     private final SimpleStringProperty secondJudge;
     private final SimpleStringProperty thridJudge;
 
-    private W5FightsData (String eventName, String place, String date,
+    public W5FightsData (String eventName, String place, String date,
                           String fightNumb, String cornerRed, String countryRed,
                           String cornerBlue, String countryBlue, String firstJudge,
                           String secondJudge,String thridJudge) {

@@ -52,13 +52,17 @@ public class W5Buttons {
 		return createJudge;
 	}
 
-	static Button setCreateFightBtn (final Stage stage) {
+	static Button setCreateFightBtn (final Stage stage)  {
 		Button createFight = new Button();
 
 		createFight.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				W5CreateFightStage.setCreateFightsStage(stage);
+				try {
+					W5CreateFightStage.setCreateFightsStage(stage);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -66,7 +70,7 @@ public class W5Buttons {
 		return createFight;
 	}
 	
-	public static Button setBackBtn(final Stage stage) {
+	public static Button setBackBtn(final Stage stage)  {
 		Button backButton = new Button();
 		backButton.setText("Back");
 		
@@ -75,7 +79,7 @@ public class W5Buttons {
 			@Override
 			public void handle(ActionEvent event) {
 				W5FirstScene.setFirstScene(stage);
-				
+
 			}
 		});
 		

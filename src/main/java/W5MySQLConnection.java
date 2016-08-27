@@ -19,7 +19,6 @@ public class W5MySQLConnection {
 
         try {
             Connection conn = dataSource.getConnection();
-            System.out.println("Connected");
             return conn;
 
         } catch (SQLException e) {
