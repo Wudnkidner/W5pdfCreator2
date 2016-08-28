@@ -18,11 +18,12 @@ public class W5FightsData {
     private final SimpleStringProperty firstJudgeSSP;
     private final SimpleStringProperty secondJudgeSSP;
     private final SimpleStringProperty thridJudgeSSP;
+    private final SimpleStringProperty refereeSSP;
 
     public W5FightsData (String eventName, String place, String date,
                           String fightNumb, String cornerRed, String countryRed,
                           String cornerBlue, String countryBlue, String firstJudge,
-                          String secondJudge,String thridJudge) {
+                          String secondJudge,String thridJudge, String referee) {
         this.eventNameSSP = new SimpleStringProperty(eventName);
         this.placeSSP = new SimpleStringProperty(place);
         this.dateSSP = new SimpleStringProperty(date);
@@ -34,7 +35,7 @@ public class W5FightsData {
         this.firstJudgeSSP = new SimpleStringProperty(firstJudge);
         this.secondJudgeSSP = new SimpleStringProperty(secondJudge);
         this.thridJudgeSSP = new SimpleStringProperty(thridJudge);
-
+        this.refereeSSP = new SimpleStringProperty(referee);
     }
 
     public String getEventName() {
@@ -123,5 +124,13 @@ public class W5FightsData {
 
     public void setThridJudge(String thridJudge) {
         thridJudgeSSP.set(thridJudge);
+    }
+
+    public String getReferee() {
+        return refereeSSP.get();
+    }
+
+    public void setReferee(String referee) {
+        refereeSSP.set(referee);
     }
 }

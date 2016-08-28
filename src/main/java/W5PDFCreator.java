@@ -12,100 +12,55 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
-import com.mysql.cj.jdbc.MysqlDataSource;
-import javafx.application.Application;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+
+/**
+ * Created by albert on 28.08.16.
+ */
+public class W5PDFCreator {
+
+    private static String element = "";
+    private static final String SRC = System.getProperty("user.home")+"/resources/pdf/clear.pdf";
+    private static final String SRС_JUDGE_LIST = System.getProperty("user.home")+"/resources/pdf/judge_list.pdf";
+    private static final String SRC_DIPLOMA = System.getProperty("user.home")+"/resources/pdf/diploma.pdf";
+
+    private static String DEST = System.getProperty("user.home")+"/result/Clear1.pdf";
+    private static String DEST_JUDGE_LIST = System.getProperty("user.home")+"/judge_list1.pdf";
 
 
-public class W5pdfCreator extends Application
-{
-
-    static String element = "";
-    public static final String SRC = System.getProperty("user.home")+"/resources/pdf/clear.pdf";
-    public static final String SRС_JUDGE_LIST = System.getProperty("user.home")+"/resources/pdf/judge_list.pdf";
-    public static final String SRC_DIPLOMA = System.getProperty("user.home")+"/resources/pdf/diploma.pdf";
-
-    public static String DEST = System.getProperty("user.home")+"/result/Clear1.pdf";
-    public static String DEST_JUDGE_LIST = System.getProperty("user.home")+"/judge_list1.pdf";
+    private static final String FONT = System.getProperty("user.home")+"/resources/fonts/MyriadPro-BoldCond.otf";
+    private static final String FONT_NAME_DIPLOMA = System.getProperty("user.home")+"/resources/fonts/CondaraBold.ttf";
+    private static final String FONT_NAME = System.getProperty("user.home")+"/resources/fonts/OpenSans-Regular.ttf";
+    private static final String FONT_JUDGE = System.getProperty("user.home")+"/resources/fonts/OpenSans-Regular.ttf";
 
 
-    public static final String FONT = System.getProperty("user.home")+"/resources/fonts/MyriadPro-BoldCond.otf";
-    public static final String FONT_NAME_DIPLOMA = System.getProperty("user.home")+"/resources/fonts/CondaraBold.ttf";
-    public static final String FONT_NAME = System.getProperty("user.home")+"/resources/fonts/OpenSans-Regular.ttf";
-    public static final String FONT_JUDGE = System.getProperty("user.home")+"/resources/fonts/OpenSans-Regular.ttf";
+    private static final Color MYBLUE = new DeviceCmyk(70,30,0,18);
+    private static final Color MYRED = new DeviceCmyk(0,83,84,13);
 
-
-    public static final Color MYBLUE = new DeviceCmyk(70,30,0,18);
-    public static final Color MYRED = new DeviceCmyk(0,83,84,13);
-
-    public static String weightCategoryText = "";
-    public static String fightNumberText = "";
-    public static String tournamentText = "";
-    public static String cityText = "";
-    public static String placeText = "";
-    public static String dateText = "";
-    public static String nameRedText = "";
-    public static String nationalityRedText = "";
-    public static String nameBlueText = "";
-    public static String nationalityBlueText = "";
-    public static String refereeText = "";
-    public static String refereeNationText = "";
-    public static String judgeText = "";
-    public static String judgeNationText = "";
-    public static String selectedValue = "";
-    public static String selectedValue2 = "";
-
-    Button saveFighter = new Button();
-    Button saveJudge = new Button();
-    Button insertFighter = new Button();
-    Button insertJudge = new Button();
-    Button createTournament = new Button();
-    Button back = new Button();
-    Button saveTournament = new Button();
-    Button pdfMaker = new Button();
-    Button createPdf = new Button();
+    private static String weightCategoryText = "";
+    private static String fightNumberText = "";
+    private static String tournamentText = "";
+    private static String cityText = "";
+    private static String placeText = "";
+    private static String dateText = "";
+    private static String nameRedText = "";
+    private static String nationalityRedText = "";
+    private static String nameBlueText = "";
+    private static String nationalityBlueText = "";
+    private static String refereeText = "";
+    private static String refereeNationText = "";
+    private static String judgeText = "";
+    private static String judgeNationText = "";
+    private static String selectedValue = "";
+    private static String selectedValue2 = "";
 
 
 
-    // Create the Message Label
-    Label messageLbl = new Label("Enter data into the text fields.");
-    Label progressCompleteLbl = new Label("ожидание");
 
-    ProgressBar pb = new ProgressBar(0);
 
-    final TextField tournamentFld = new TextField();
-    final TextField fightNumberFld = new TextField();
-    final TextField nameFld = new TextField();
-    final TextField surnameFld = new TextField();
-    final TextField nicknameFld = new TextField();
-    final TextField countryFld = new TextField();
-    final TextField ageFld = new TextField();
-    final TextField heightFld = new TextField();
-    final TextField fightsFld = new TextField();
-    final TextField winFld = new TextField();
-    final TextField koFld = new TextField();
-    final TextField lossFld = new TextField();
-    final TextField drawFld =  new TextField();
-    final TextField dateFld = new TextField();
-    final TextField cityFld = new TextField();
-    final TextField placeFld = new TextField();
-    final TextField weight_categoryFld = new TextField();
+
 
     ArrayList<String> arrayBox = new ArrayList<String>();
     ArrayList<String> arrayRefereeBox = new ArrayList<String>();
@@ -121,294 +76,7 @@ public class W5pdfCreator extends Application
 
 
 
-
-
-
-
-    public static void main(String[] args) throws IOException {
-
-        Application.launch(args);
-    }
-
-    @Override
     public void start(final Stage stage) {
-
-        insertFighter.setText("Insert fighter");
-        insertJudge.setText("Insert judge");
-        back.setText("Back");
-        saveFighter.setText("Save");
-        saveJudge.setText("Save");
-        createTournament.setText("Create tournament");
-        saveTournament.setText("Save");
-        pdfMaker.setText("PDF maker");
-        createPdf.setText("Create PDF");
-        // Both fields should be wide enough to display 15 chars
-        nameFld.setPrefColumnCount(16);
-        surnameFld.setPrefColumnCount(16);
-
-
-        // Set ActionEvent handlers for both fields
-        createPdf.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                File file = new File(DEST);
-                file.getParentFile().mkdirs();
-
-                try {
-                    try {
-                        //Progress bar
-                        Integer STARTTIME =15;
-                        IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
-                        pb.progressProperty().bind(timeSeconds.divide(STARTTIME*100.0).subtract(1).multiply(-1));
-
-                        new W5pdfCreator().manipulatePdf(SRC,DEST);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        fightNumberFld.setOnAction((new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-
-            }
-        }));
-
-
-
-        createTournament.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                Scene scene = createTournament();
-                stage.setScene(scene);
-            }
-        });
-
-
-
-        back.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                arrayBox.clear();
-                arrayRefereeBox.clear();
-
-                Scene scene = scene1();
-                stage.setScene(scene);
-            }
-        });
-
-        insertFighter.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                GridPane root = new GridPane();
-                // Set the horizontal spacing to 10px
-                root.setHgap(10);
-                // Set the vertical spacing to 5px
-                root.setVgap(5);
-                MysqlDataSource dataSource = new MysqlDataSource();
-                dataSource.setUser("root");
-                dataSource.setPassword("root");
-                dataSource.setUrl("jdbc:mysql://localhost/w5database?useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
-                dataSource.setPort(3306);
-
-                Connection conn = null;
-                try {
-                    conn = dataSource.getConnection();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                Statement stmt = null;
-                try {
-                    stmt = conn.createStatement();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                ResultSet rs = null;
-                try {
-                    rs = stmt.executeQuery("SELECT * FROM tournaments");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    while(rs.next()) {
-                        tournamentsBox.getItems().clear();
-                        arrayBox.add(rs.getString("tournament"));
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                tournamentsBox.getItems().addAll(arrayBox);
-
-                tournamentsBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>()
-
-                {
-
-                    public void changed(ObservableValue<? extends String> ov, final String oldValue, final String newValue)
-
-                    {
-                        selectedValue2 = newValue;
-
-                    }
-
-                });
-
-                //tournamentsBox.getItems().addAll(Box[0]);
-
-
-                // Add Labels and Fields to the GridPane
-
-                root.addRow(0, messageLbl);
-                root.addRow(1, new Label("Tournament:"), tournamentsBox);
-                root.addRow(2, new Label("Fight number:"), fightNumberFld);
-                root.addRow(3, new Label("Name:"), nameFld);
-                root.addRow(4, new Label("Surname:"), surnameFld);
-                root.addRow(5, new Label("Nickname:"), nicknameFld);
-                root.addRow(6, new Label("Country:"), countryFld);
-                root.addRow(7, new Label("Age:"), ageFld);
-                root.addRow(8, new Label("Height:"), heightFld);
-                root.addRow(9, new Label("Fights:"), fightsFld);
-                root.addRow(10, new Label("Win:"), winFld);
-                root.addRow(11, new Label("KO:"), koFld);
-                root.addRow(12, new Label("Loss:"), lossFld);
-                root.addRow(13, new Label("Draw:"), drawFld);
-                root.addRow(14, new Label("Weight category:"), weight_categoryFld);
-                root.addRow(15, new Label(""), saveFighter);
-                root.addRow(16, new Label(""), back);
-
-                root.setMinSize(1028, 720);
-
-                root.setStyle("-fx-padding: 10;"
-                );
-
-                Scene scene = new Scene(root);
-
-                stage.setScene(scene);
-            }
-        });
-
-        insertJudge.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                Scene scene = scene2();
-                stage.setScene(scene);
-            }
-        });
-
-        saveJudge.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-
-                MysqlDataSource dataSource = new MysqlDataSource();
-                dataSource.setUser("root");
-                dataSource.setPassword("root");
-                dataSource.setUrl("jdbc:mysql://localhost/w5database?useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
-                dataSource.setPort(3306);
-                dataSource.setDatabaseName("w5database");
-
-                Connection conn = null;
-                try {
-                    conn = dataSource.getConnection();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-                PreparedStatement insertNewRow = null;
-                String insertString =
-                        "INSERT INTO referees"+
-                                "(tournament,fight_number,name,surname,country)"+
-                                "VALUES"+
-                                "(?,?,?,?,?)"   ;
-
-                tournamentsBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>()
-
-                {
-
-                    public void changed(ObservableValue<? extends String> ov, final String oldValue, final String newValue)
-
-                    {
-                        selectedValue = newValue;
-                    }
-
-                });
-
-                try {
-                    insertNewRow = conn.prepareStatement(insertString);
-
-                    insertNewRow.setString(1,selectedValue);
-                    insertNewRow.setInt(2,Integer.parseInt(fightNumberFld.getText()));
-                    insertNewRow.setString(3,nameFld.getText());
-                    insertNewRow.setString(4,surnameFld.getText());
-                    insertNewRow.setString(5,countryFld.getText());
-                    insertNewRow.execute();
-                    conn.close();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-
-                tournamentFld.clear();
-                fightNumberFld.clear();
-                nameFld.clear();
-                surnameFld.clear();
-                nicknameFld.clear();
-                countryFld.clear();
-                ageFld.clear();
-                heightFld.clear();
-                fightsFld.clear();
-                winFld.clear();
-                koFld.clear();
-                lossFld.clear();
-                drawFld.clear();
-
-
-            }
-        });
-
-        saveTournament.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                MysqlDataSource dataSource = new MysqlDataSource();
-                dataSource.setUser("root");
-                dataSource.setPassword("root");
-                dataSource.setUrl("jdbc:mysql://localhost/w5database?useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
-                dataSource.setPort(3306);
-                dataSource.setDatabaseName("w5database");
-
-                Connection conn = null;
-                try {
-                    conn = dataSource.getConnection();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-                PreparedStatement insertNewRow = null;
-                String insertString =
-                        "INSERT INTO tournaments"+
-                                "(tournament,city,place,date)"+
-                                "VALUES"+
-                                "(?,?,?,?)";
-
-
-
-                try {
-                    insertNewRow = conn.prepareStatement(insertString);
-                    insertNewRow.setString(1,tournamentFld.getText());
-                    insertNewRow.setString(2,cityFld.getText());
-                    insertNewRow.setString(3,placeFld.getText());
-                    insertNewRow.setString(4,dateFld.getText());
-
-
-                    insertNewRow.execute();
-                    conn.close();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-
-                tournamentFld.clear();
-                cityFld.clear();
-                placeFld.clear();
-                dateFld.clear();
-
-
-            }
-        });
 
         pdfMaker.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
@@ -417,80 +85,6 @@ public class W5pdfCreator extends Application
 
             }
         });
-
-        saveFighter.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-
-                MysqlDataSource dataSource = new MysqlDataSource();
-                dataSource.setUser("root");
-                dataSource.setPassword("root");
-                dataSource.setUrl("jdbc:mysql://localhost/w5database?useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
-                dataSource.setPort(3306);
-                dataSource.setDatabaseName("w5database");
-                Connection conn = null;
-                try {
-                    conn = dataSource.getConnection();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-                PreparedStatement insertNewRow = null;
-                String insertString =
-                        "INSERT INTO fighters"+
-                                "(tournament,fight_number,name,surname,nickname,country,age,height,fights,win,ko,loss,draw,weight_category)"+
-                                "VALUES"+
-                                "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-
-
-                try {
-
-                    insertNewRow = conn.prepareStatement(insertString);
-
-                    insertNewRow.setString(1,selectedValue2);
-                    insertNewRow.setInt(2,Integer.parseInt(fightNumberFld.getText()));
-                    insertNewRow.setString(3,nameFld.getText());
-                    insertNewRow.setString(4,surnameFld.getText());
-                    insertNewRow.setString(5,nicknameFld.getText().length() == 0 ? "" : nicknameFld.getText());
-                    insertNewRow.setString(6,countryFld.getText());
-                    insertNewRow.setInt(7,Integer.parseInt(ageFld.getText()));
-                    insertNewRow.setFloat(8,Float.parseFloat(heightFld.getText()));
-                    insertNewRow.setInt(9,fightsFld.getText().length() == 0 ? 0 : Integer.parseInt(fightsFld.getText()));
-                    insertNewRow.setInt(10, winFld.getText().length() == 0 ? 0 :Integer.parseInt(winFld.getText()));
-                    insertNewRow.setInt(11, koFld.getText().length() == 0 ? 0 :Integer.parseInt(koFld.getText()));
-                    insertNewRow.setInt(12, lossFld.getText().length() == 0 ? 0 : Integer.parseInt(lossFld.getText()));
-                    insertNewRow.setInt(13, drawFld.getText().length() == 0 ? 0 : Integer.parseInt(drawFld.getText()));
-                    insertNewRow.setString(14, weight_categoryFld.getText());
-                    insertNewRow.execute();
-
-                    conn.close();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-
-                tournamentFld.clear();
-                fightNumberFld.clear();
-                nameFld.clear();
-                surnameFld.clear();
-                nicknameFld.clear();
-                countryFld.clear();
-                ageFld.clear();
-                heightFld.clear();
-                fightsFld.clear();
-                winFld.clear();
-                koFld.clear();
-                lossFld.clear();
-                drawFld.clear();
-                weight_categoryFld.clear();
-
-
-            }
-        });
-
-        // Set the Size of the GridPane
-
-
 
 		/*
 		 * Set the padding of the GridPane
@@ -519,110 +113,14 @@ public class W5pdfCreator extends Application
 
     }
 
-    // Helper Method
-
-
-    public Scene createTournament () {
-        GridPane select = new GridPane();
-
-
-        tournamentFld.setPrefColumnCount(18);
-        select.addRow(0, new Label("Tournament name: "), tournamentFld);
-        select.addRow(1, new Label("City: "), cityFld);
-        select.addRow(2, new Label("Place: "), placeFld);
-        select.addRow(3, new Label("Date: "), dateFld);
-        select.addRow(4, new Label(""),saveTournament);
-        select.addRow(5, new Label(""), back);
 
 
 
-        select.setHgap(10);
-        select.setVgap(5);
-        select.setMinSize(1028,720);
-
-        select.setStyle("-fx-padding: 10;"
-        );
-
-        Scene scene = new Scene(select);
-        return scene;
-    }
-
-    public Scene scene1 () {
-        GridPane select = new GridPane();
 
 
-        select.addRow(0, new Label(""), createTournament);
-        select.addRow(1, new Label(""), insertFighter);
-        select.addRow(2, new Label(""), insertJudge);
-        select.addRow(3, new Label(""), pdfMaker);
-
-        select.setHgap(10);
-        select.setVgap(5);
-        select.setMinSize(1028,720);
-
-        select.setStyle("-fx-padding: 10;"
-        );
-
-        Scene scene = new Scene(select);
-        return scene;
-    }
-
-    public Scene scene2 () {
-        GridPane select = new GridPane();
-
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUser("root");
-        dataSource.setPassword("root");
-        dataSource.setUrl("jdbc:mysql://localhost/w5database?useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
-        dataSource.setPort(3306);
-
-        Connection conn = null;
-        try {
-            conn = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ResultSet rs = null;
-        try {
-            rs = stmt.executeQuery("SELECT * FROM tournaments");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            while(rs.next()) {
-                tournamentsBox.getItems().clear();
-                arrayBox.add(rs.getString("tournament"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        tournamentsBox.getItems().addAll(arrayBox);
-
-        select.addRow(0, new Label("Tournament: "), tournamentsBox);
-        select.addRow(1, new Label("Fight number: "), fightNumberFld);
-        select.addRow(2, new Label("Name: "), nameFld);
-        select.addRow(3, new Label("Surname: "), surnameFld);
-        select.addRow(4, new Label("Country: "), countryFld);
-        select.addRow(5, new Label(""), saveJudge);
-        select.addRow(6, new Label(""), back);
 
 
-        select.setHgap(10);
-        select.setVgap(5);
-        select.setMinSize(1028,720);
 
-        select.setStyle("-fx-padding: 10;"
-        );
-
-        Scene scene = new Scene(select);
-        return scene;
-    }
 
     public Scene pdfMaker () {
         GridPane select = new GridPane();
@@ -1642,9 +1140,7 @@ public class W5pdfCreator extends Application
 
     }
 
-    public void printMessage (String message) {
-        progressCompleteLbl.setText(message);
-    }
+
 
 
     int countEven(int index) {
@@ -1652,17 +1148,5 @@ public class W5pdfCreator extends Application
         return counter;
     }
 
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

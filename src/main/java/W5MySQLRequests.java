@@ -1,9 +1,8 @@
 import com.mysql.cj.jdbc.MysqlDataSource;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +20,56 @@ public class W5MySQLRequests {
     //private static ArrayList<String> countryBlueList;
     private static  ArrayList<String> judgeList;
     private static  ArrayList<String> refereeList;
+    private static ObservableList<W5FightsData> fightsList;
 
+    public static void insertRow (
+            String tournamentText, String placeText, String dateText,
+            String fightNumText, String fighterRedText, String countryRedText,
+            String fighterBlueText, String countryBlueText, String judge1Text,
+            String judge2Text, String judge3Text, String refereeText) throws SQLException{
+
+        Connection connection = W5MySQLConnection.getConnection();
+
+        String insertString =
+                "INSERT INTO Fights"+
+                "(eventname, place, date, fightnumber, cornerred,countryred," +
+                "cornerblue,country,firstjudge,secondjudge,thridjudge, referee)" +
+                "VALUES" +
+                "(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        if ( connection != null) {
+        PreparedStatement preparedStmt = connection.prepareStatement(insertString);
+        preparedStmt.setString(1, tournamentText);
+        preparedStmt.setString(2, placeText);
+        preparedStmt.setString(3, dateText);
+        preparedStmt.setString(4, fightNumText);
+        preparedStmt.setString(5, fighterRedText);
+        preparedStmt.setString(6, countryRedText);
+        preparedStmt.setString(7, fighterBlueText);
+        preparedStmt.setString(8, countryBlueText);
+        preparedStmt.setString(9, judge1Text);
+        preparedStmt.setString(10, judge2Text);
+        preparedStmt.setString(11, judge3Text);
+        preparedStmt.setString(12, refereeText);
+        preparedStmt.execute();
+        connection.close();
+        W5CreateFightStage.setStatus("Compleate");
+        } else {
+            W5CreateFightStage.setStatus("Error");
+        }
+    }
+
+    public static void deleteRow (String fighNumb) throws SQLException {
+        Connection connection = W5MySQLConnection.getConnection();
+
+        String insertString = "DELETE FROM Fights WHERE fightnumber = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(insertString);
+        preparedStatement.setString(1,fighNumb);
+        preparedStatement.execute();
+        connection.close();
+
+    }
 
     public static ArrayList<String> getTournamentsList() throws SQLException{
         tournamentList = new ArrayList<String>();
@@ -137,6 +185,26 @@ public class W5MySQLRequests {
         }
         return refereeList;
     }
+
+    public static ObservableList<W5FightsData> getFightsList() throws SQLException{
+        fightsList = FXCollections.observableArrayList();
+        Connection connection = W5MySQLConnection.getConnection();
+        assert connection != null;
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Fights");
+        while(rs.next()) {
+            fightsList.add(new W5FightsData(rs.getString("eventname"),
+                    rs.getString("place"), rs.getString("date"),
+                    rs.getString("fightnumber"), rs.getString("cornerred"),
+                    rs.getString("countryred"),  rs.getString("cornerblue"),
+                    rs.getString("country"),  rs.getString("firstjudge"),
+                    rs.getString("secondjudge"),  rs.getString("thridjudge"),
+                    rs.getString("referee")
+                    ));
+        }
+        return fightsList;
+    }
+
 
 }
 

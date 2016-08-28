@@ -2,6 +2,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,12 +13,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class W5CreateFightStage {
@@ -49,6 +53,7 @@ public class W5CreateFightStage {
 	private static String judge3Text;
 	private static String refereeText;
 
+	private static Label statusLbl = new Label("waiting...");
 
 
 	private static final ObservableList<W5FightsData> data =
@@ -58,14 +63,14 @@ public class W5CreateFightStage {
 
 
 
-	private static GridPane gridPane = new GridPane();
-	private static TableView<W5FightsData> tableView  = new TableView<W5FightsData>();
+	private static GridPane gridPane;
+	private static TableView<W5FightsData> tableView;
 
 	public static void setCreateFightsStage (Stage stage) throws SQLException {
-
-		for (int i = 1; i < 6; i++) {
-		data.add(new W5FightsData("eventName", "Place", "Date", Integer.toString(i), "t5", "t6", "t7", "t8", "t9", "t10", "t11"));
-		}
+		data.clear();
+		gridPane = new GridPane();
+		tableView = new TableView<W5FightsData>();
+		data.addAll(W5MySQLRequests.getFightsList());
 
 
 
@@ -85,8 +90,8 @@ public class W5CreateFightStage {
 		gridPane.addRow(4, new Label("Country red:"), createCountryRedCBox(), new Label("Country blue:"), createCountryBlueCBox());
 		gridPane.addRow(5, new Label("First judge:"), createJudge1CBox(), new Label("Second judge:"),createJudge2CBox(), new Label("Third judge: "), createJudge3CBox());
 		gridPane.addRow(6, new Label("Referee:"), createRefereeCBox());
-		gridPane.addRow(7, new Label(""),createAddBtn(), createDeleteBtn());
-
+		gridPane.addRow(7, new Label(""),createAddBtn(), createDeleteBtn(), W5Buttons.setBackBtn(stage));
+		gridPane.addRow(8, new Label("Status: "), statusLbl);
 		//TableView
 		tableView.setPrefSize(1280, 300);
 		tableView.setEditable(true);
@@ -155,10 +160,15 @@ public class W5CreateFightStage {
 		thridJudgeTC.setCellValueFactory(
 				new PropertyValueFactory<W5FightsData, String>("thridJudge")
 		);
+		TableColumn refereeTC = new TableColumn("Referee");
+		refereeTC.setMinWidth(100);
+		refereeTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("referee")
+		);
 		tableView.setItems(data);
 		tableView.getColumns().addAll(eventNameTC, placeTC, dateTC, fightNumbTC, cornerRedTC,
 				countryRedTC, cornerBlueTC, countryBlueTC, firstJudgeTC,
-				secondJudgeTC,thridJudgeTC);
+				secondJudgeTC,thridJudgeTC,refereeTC);
 
 		final VBox vbox = new VBox();
 		vbox.setSpacing(5);
@@ -172,19 +182,31 @@ public class W5CreateFightStage {
 
 	}
 
-	private static Button createAddBtn () {
+	private static Button createAddBtn () throws SQLException {
 		Button addBtn = new Button();
 		addBtn.setPrefWidth(156);
 		addBtn.setText("Add");
 		addBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
-				data.add(new W5FightsData(tournamentText, placeText, dateText,
-						fightNumText, countryRedText, countryRedText,
-						fighterBlueText, countryBlueText, judge1Text,
-						judge2Text, judge3Text));
+			public void handle(ActionEvent event)  {
+				try {
+					data.clear();//"обнуляю" ячейки в tableview
+					W5MySQLRequests.insertRow(tournamentText, placeText, dateText,
+                            fightNumText, fighterRedText, countryRedText,
+                            fighterBlueText, countryBlueText, judge1Text,
+                            judge2Text, judge3Text, refereeText);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				try {
+					data.addAll(W5MySQLRequests.getFightsList());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
 			}
-		});
+		}) ;
 
 		return addBtn;
 	}
@@ -197,6 +219,18 @@ public class W5CreateFightStage {
 			public void handle(ActionEvent event) {
 				W5FightsData selectedItem = tableView.getSelectionModel().getSelectedItem();
 				tableView.getItems().remove(selectedItem);
+				try {
+					W5MySQLRequests.deleteRow(selectedItem.getFightNumb());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				try {
+					data.clear();
+					tableView.refresh();
+					data.addAll(W5MySQLRequests.getFightsList());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -357,6 +391,29 @@ public class W5CreateFightStage {
 			}
 		});
 		return refereeCBox;
+	}
+
+	public static void setStatus (final String status) {
+		statusLbl.setText(status);
+		statusLbl.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY.EMPTY,Insets.EMPTY)));
+		Task<Void> sleeper = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+				}
+				return null;
+			}
+		};
+		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				statusLbl.setText("waiting...");
+				statusLbl.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY.EMPTY,Insets.EMPTY)));
+			}
+		});
+		new Thread(sleeper).start();
 	}
 
 }
