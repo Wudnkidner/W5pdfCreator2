@@ -49,13 +49,11 @@ public class W5CreateFightStage {
 	private static String judge3Text;
 	private static String refereeText;
 
+
+
 	private static final ObservableList<W5FightsData> data =
-			FXCollections.observableArrayList(
-					/*new W5FightsData(tournamentText,placeText,dateText,fightNumText,weightText,
-							fighterRedText,countryRedText,fighterBlueText,countryBlueText,
-							judge1Text, judge2Text, judge3Text, refereeText)*/
-					new W5FightsData("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11")
-			);
+			FXCollections.observableArrayList();
+
 
 
 
@@ -64,6 +62,13 @@ public class W5CreateFightStage {
 	private static TableView<W5FightsData> tableView  = new TableView<W5FightsData>();
 
 	public static void setCreateFightsStage (Stage stage) throws SQLException {
+
+		for (int i = 1; i < 6; i++) {
+		data.add(new W5FightsData("eventName", "Place", "Date", Integer.toString(i), "t5", "t6", "t7", "t8", "t9", "t10", "t11"));
+		}
+
+
+
 		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
 		Scene scene = new Scene(new Group());
@@ -80,7 +85,7 @@ public class W5CreateFightStage {
 		gridPane.addRow(4, new Label("Country red:"), createCountryRedCBox(), new Label("Country blue:"), createCountryBlueCBox());
 		gridPane.addRow(5, new Label("First judge:"), createJudge1CBox(), new Label("Second judge:"),createJudge2CBox(), new Label("Third judge: "), createJudge3CBox());
 		gridPane.addRow(6, new Label("Referee:"), createRefereeCBox());
-
+		gridPane.addRow(7, new Label(""),createAddBtn());
 		//TableView
 		tableView.setPrefSize(1280, 300);
 		tableView.setEditable(true);
@@ -92,24 +97,63 @@ public class W5CreateFightStage {
 				new PropertyValueFactory<W5FightsData, String>("eventName")
 		);
 		TableColumn placeTC = new TableColumn("Place");
+		placeTC.setMinWidth(100);
+		placeTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("place")
+		);
 
 		TableColumn dateTC = new TableColumn("Date");
+		dateTC.setMinWidth(100);
+		dateTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("date")
+		);
 
 		TableColumn fightNumbTC = new TableColumn("Fight №");
+		fightNumbTC.setMinWidth(100);
+		fightNumbTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("fightNumb")
+		);
 
 		TableColumn cornerRedTC = new TableColumn("Corner red");
+		cornerRedTC.setMinWidth(100);
+		cornerRedTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("cornerRed")
+		);
 
 		TableColumn countryRedTC = new TableColumn("Country red");
+		countryRedTC.setMinWidth(100);
+		countryRedTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("countryRed")
+		);
 
 		TableColumn cornerBlueTC = new TableColumn("Corner blue");
+		cornerBlueTC.setMinWidth(100);
+		cornerBlueTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("cornerBlue")
+		);
 
 		TableColumn countryBlueTC = new TableColumn("Country blue");
+		countryBlueTC.setMinWidth(100);
+		countryBlueTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("countryBlue")
+		);
 
 		TableColumn firstJudgeTC = new TableColumn("First judge");
+		firstJudgeTC.setMinWidth(100);
+		firstJudgeTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("firstJudge")
+		);
 
 		TableColumn secondJudgeTC = new TableColumn("Second judge");
-
+		secondJudgeTC.setMinWidth(100);
+		secondJudgeTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("secondJudge")
+		);
 		TableColumn thridJudgeTC = new TableColumn("Thrid judge");
+		thridJudgeTC.setMinWidth(100);
+		thridJudgeTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("thridJudge")
+		);
 		tableView.setItems(data);
 		tableView.getColumns().addAll(eventNameTC, placeTC, dateTC, fightNumbTC, cornerRedTC,
 				countryRedTC, cornerBlueTC, countryBlueTC, firstJudgeTC,
@@ -129,47 +173,78 @@ public class W5CreateFightStage {
 
 	private static Button createAddBtn () {
 		Button addBtn = new Button();
+		addBtn.setPrefWidth(156);
 		addBtn.setText("Add");
 		addBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
+				data.add(new W5FightsData(tournamentText, placeText, dateText,
+						fightNumText, countryRedText, countryRedText,
+						fighterBlueText, countryBlueText, judge1Text,
+						judge2Text, judge3Text));
 			}
 		});
 
 		return addBtn;
 	}
 
-	private static ComboBox createTournamentCBox () {
+	private static ComboBox createTournamentCBox () throws SQLException {
 		tournamentCBox = new ComboBox();
-		tournamentCBox.setPrefSize(100,20);
-
-
-
+		tournamentCBox.getItems().addAll(W5MySQLRequests.getTournamentsList());
+		tournamentCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				tournamentText = newValue;
+			}
+		});
 		return tournamentCBox;
 	}
 
-	private static ComboBox createPlaceCBox () {
+	private static ComboBox createPlaceCBox () throws SQLException {
 		placeCBox = new ComboBox();
-
+		placeCBox.getItems().addAll(W5MySQLRequests.getPlaceList());
+		placeCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				placeText = newValue;
+			}
+		});
 		return placeCBox;
 	}
 
-	private static ComboBox createDateCBox () {
+	private static ComboBox createDateCBox () throws SQLException {
 		dateCBox = new ComboBox();
-
+		dateCBox.getItems().addAll(W5MySQLRequests.getDateList());
+		dateCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				dateText = newValue;
+			}
+		});
 		return dateCBox;
 	}
 
-	private static ComboBox createFightNumCBox () {
+	private static ComboBox createFightNumCBox () throws SQLException {
 		fightNumCBox = new ComboBox();
-
+		fightNumCBox.getItems().addAll(W5MySQLRequests.getFightNumList());
+		fightNumCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				fightNumText = newValue;
+			}
+		});
 		return fightNumCBox;
 	}
 
-	private static ComboBox createWeightCBox () {
+	private static ComboBox createWeightCBox () throws SQLException {
 		weightCBox = new ComboBox();
-
+		weightCBox.getItems().addAll(W5MySQLRequests.getWeightList());
+		weightCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				weightText = newValue;
+			}
+		});
 		return weightCBox;
 	}
 
@@ -179,7 +254,7 @@ public class W5CreateFightStage {
 		fighterRedCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-
+				fighterRedText = newValue;
 			}
 		});
 		return fighterRedCBox;
@@ -188,42 +263,84 @@ public class W5CreateFightStage {
 	private static ComboBox createFighterBlueCBox () throws SQLException {
 		fighterBlueCBox = new ComboBox();
 		fighterBlueCBox.getItems().addAll(W5MySQLRequests.getFightersList());
+		fighterBlueCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				fighterBlueText = newValue;
+			}
+		});
 		return fighterBlueCBox;
 	}
 
-	private static ComboBox createCountryRedCBox () {
-		fighterRedCBox = new ComboBox();
-
-		return fighterRedCBox;
+	private static ComboBox createCountryRedCBox () throws SQLException {
+		countryRedCBox = new ComboBox();
+		countryRedCBox.getItems().addAll(W5MySQLRequests.getCountryList());
+		countryRedCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				countryRedText = newValue;
+			}
+		});
+		return countryRedCBox;
 	}
 
-	private static ComboBox createCountryBlueCBox () {
-		fighterRedCBox = new ComboBox();
-
-		return fighterRedCBox;
+	private static ComboBox createCountryBlueCBox () throws SQLException {
+		countryBlueCBox = new ComboBox();
+		countryBlueCBox.getItems().addAll(W5MySQLRequests.getCountryList());
+		countryBlueCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				countryBlueText = newValue;
+			}
+		});
+		return countryBlueCBox;
 	}
 
-	private static ComboBox createJudge1CBox () {
-		fighterRedCBox = new ComboBox();
-
-		return fighterRedCBox;
+	private static ComboBox createJudge1CBox () throws SQLException {
+		judge1CBox = new ComboBox();
+		judge1CBox.getItems().addAll(W5MySQLRequests.getJudgeList());
+		judge1CBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				judge1Text = newValue;
+			}
+		});
+		return judge1CBox;
 	}
 
-	private static ComboBox createJudge2CBox () {
-		fighterRedCBox = new ComboBox();
-
-		return fighterRedCBox;
+	private static ComboBox createJudge2CBox () throws SQLException {
+		judge2CBox = new ComboBox();
+		judge2CBox.getItems().addAll(W5MySQLRequests.getJudgeList());
+		judge2CBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				judge2Text = newValue;
+			}
+		});
+		return judge2CBox;
 	}
 
-	private static ComboBox createJudge3CBox () {
-		fighterRedCBox = new ComboBox();
-
-		return fighterRedCBox;
+	private static ComboBox createJudge3CBox () throws SQLException {
+		judge3CBox = new ComboBox();
+		judge3CBox.getItems().addAll(W5MySQLRequests.getJudgeList());
+		judge3CBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				judge3Text = newValue;
+			}
+		});
+		return judge3CBox;
 	}
 
-	private static ComboBox createRefereeCBox () {
+	private static ComboBox createRefereeCBox () throws SQLException {
 		refereeCBox = new ComboBox();
-
+		refereeCBox.getItems().addAll(W5MySQLRequests.getRefereeList());
+		refereeCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				refereeText = newValue;
+			}
+		});
 		return refereeCBox;
 	}
 
