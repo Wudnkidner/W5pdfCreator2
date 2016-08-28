@@ -85,7 +85,8 @@ public class W5CreateFightStage {
 		gridPane.addRow(4, new Label("Country red:"), createCountryRedCBox(), new Label("Country blue:"), createCountryBlueCBox());
 		gridPane.addRow(5, new Label("First judge:"), createJudge1CBox(), new Label("Second judge:"),createJudge2CBox(), new Label("Third judge: "), createJudge3CBox());
 		gridPane.addRow(6, new Label("Referee:"), createRefereeCBox());
-		gridPane.addRow(7, new Label(""),createAddBtn());
+		gridPane.addRow(7, new Label(""),createAddBtn(), createDeleteBtn());
+
 		//TableView
 		tableView.setPrefSize(1280, 300);
 		tableView.setEditable(true);
@@ -182,6 +183,20 @@ public class W5CreateFightStage {
 						fightNumText, countryRedText, countryRedText,
 						fighterBlueText, countryBlueText, judge1Text,
 						judge2Text, judge3Text));
+			}
+		});
+
+		return addBtn;
+	}
+
+	private static Button createDeleteBtn () {
+		Button addBtn = new Button("Delete");
+		addBtn.setPrefWidth(156);
+		addBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				W5FightsData selectedItem = tableView.getSelectionModel().getSelectedItem();
+				tableView.getItems().remove(selectedItem);
 			}
 		});
 
