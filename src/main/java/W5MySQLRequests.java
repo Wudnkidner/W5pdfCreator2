@@ -208,10 +208,4 @@ public class W5MySQLRequests {
 
 }
 
-class testDriveConnection {
-    public static void main(String[] args) throws SQLException {
-        W5MySQLRequests request = new W5MySQLRequests();
-            System.out.println(request.getFightersList().get(0));
 
-    }
-}
