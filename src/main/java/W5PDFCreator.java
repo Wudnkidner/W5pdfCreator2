@@ -21,9 +21,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-/**
- * Created by albert on 28.08.16.
- */
+
 public class W5PDFCreator {
 
     private static String element = "";
