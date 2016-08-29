@@ -29,7 +29,7 @@ CREATE TABLE `Fighters` (
   `country` varchar(30) NOT NULL,
   `weight` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,32 +38,69 @@ CREATE TABLE `Fighters` (
 
 LOCK TABLES `Fighters` WRITE;
 /*!40000 ALTER TABLE `Fighters` DISABLE KEYS */;
+INSERT INTO `Fighters` VALUES (1,'Boris','Kuspal','Slovakia','81'),(2,'Marko','Gurdeljevi?','Serbia','81'),(3,'Greaga','Smole','Slovenia','77'),(4,'Mateusz','?ukowski','Brazil','77');
 /*!40000 ALTER TABLE `Fighters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Judge`
+-- Table structure for table `Fights`
 --
 
-DROP TABLE IF EXISTS `Judge`;
+DROP TABLE IF EXISTS `Fights`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Judge` (
+CREATE TABLE `Fights` (
+  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
+  `eventname` varchar(30) NOT NULL,
+  `place` varchar(30) NOT NULL,
+  `date` varchar(30) NOT NULL,
+  `fightnumber` varchar(30) NOT NULL,
+  `cornerred` varchar(30) NOT NULL,
+  `countryred` varchar(30) NOT NULL,
+  `cornerblue` varchar(30) NOT NULL,
+  `country` varchar(30) NOT NULL,
+  `firstjudge` varchar(30) NOT NULL,
+  `secondjudge` varchar(30) NOT NULL,
+  `thridjudge` varchar(30) NOT NULL,
+  `referee` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Fights`
+--
+
+LOCK TABLES `Fights` WRITE;
+/*!40000 ALTER TABLE `Fights` DISABLE KEYS */;
+INSERT INTO `Fights` VALUES (27,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','1','Marko Gurdeljevi?','Slovakia','Greaga Smole','Serbia','Gyorgy Vojvoda','Mladen Kranjcec','Mladen Kranjcec','Jiri Bel'),(28,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','2','Marko Gurdeljevi?','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(29,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','3','Greaga Smole','Slovenia','Mateusz ?ukowski','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(30,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','4','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(31,'W5 EUROPEAN LEAGUE','REBUY STARS','31.08.2016','5','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(32,'W5 EUROPEAN LEAGUE','REBUY STARS','31.08.2016','5','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Brazil','Denis Sidenko','Denis Sidenko','Denis Sidenko','Denis Sidenko');
+/*!40000 ALTER TABLE `Fights` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Judges`
+--
+
+DROP TABLE IF EXISTS `Judges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Judges` (
   `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `firstname` varchar(30) NOT NULL,
   `lastname` varchar(30) NOT NULL,
   `country` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Judge`
+-- Dumping data for table `Judges`
 --
 
-LOCK TABLES `Judge` WRITE;
-/*!40000 ALTER TABLE `Judge` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Judge` ENABLE KEYS */;
+LOCK TABLES `Judges` WRITE;
+/*!40000 ALTER TABLE `Judges` DISABLE KEYS */;
+INSERT INTO `Judges` VALUES (1,'Gyorgy','Vojvoda','Hungary'),(2,'Jiri','Bel','Czech'),(3,'Mladen','Kranjcec','Croatia'),(4,'Denis','Sidenko','Russia'),(5,'Igor','Shimdt','Slovakia');
+/*!40000 ALTER TABLE `Judges` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -80,7 +117,7 @@ CREATE TABLE `Tournaments` (
   `place` varchar(30) DEFAULT NULL,
   `date` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-26  0:58:15
+-- Dump completed on 2016-08-29  5:26:41
