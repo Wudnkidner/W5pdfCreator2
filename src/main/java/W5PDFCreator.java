@@ -770,7 +770,7 @@ public class W5PDFCreator {
 class TestDrivePDF {
 
     public static void main(String[] args) throws IOException, SQLException {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             W5FightCard.makeFightCard(i);
         }
     }

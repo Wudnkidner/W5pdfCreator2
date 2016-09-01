@@ -87,7 +87,9 @@ public class W5FightCard {
             secondJudgeList.add(rs.getString("secondjudge"));
             thridJudgeList.add(rs.getString("thridjudge"));
             refereeList.add(rs.getString("referee"));
+
         }
+
         /*
         for (int i = 0; i < eventNameList.size(); i++) {
             System.out.println(eventNameList.get(i) + " " + placeList.get(i) + " " +
@@ -102,18 +104,16 @@ public class W5FightCard {
         makePDF(index);
     }
 
-    public static void makePDF (int fightNumb) throws IOException {
+    public static void makePDF (int fightNumb) throws IOException, SQLException {
         for (int docNumb = 0; docNumb < 3; docNumb++) {
-            if (docNumb == 0) {
-                judgeText = firstJudgeList.get(fightNumb);
+            switch (docNumb) {
+                case 0: judgeText = firstJudgeList.get(fightNumb); break;
+                case 1: judgeText = secondJudgeList.get(fightNumb); break;
+                case 2: judgeText = thridJudgeList.get(fightNumb); break;
+                    default: judgeText = "Ошибка";
             }
-            else if (docNumb == 1) {
-                judgeText = secondJudgeList.get(fightNumb);
-            }
-            else if (docNumb == 2) {
-                judgeText = thridJudgeList.get(fightNumb);
-            }
-            destToFightCard = System.getProperty("user.home") + "/result/Fight" + fightNumb + ", Judge " + judgeText + ".pdf";
+      
+            destToFightCard = System.getProperty("user.home") + "/result/Fight" + (fightNumb+1) + ", Judge " + judgeText + ".pdf";
             File createFightCard = new File(destToFightCard);
             createFightCard.getParentFile().mkdirs();
 
@@ -158,25 +158,13 @@ public class W5FightCard {
             PdfFont font_name = PdfFontFactory.createFont(FONT_NAME, "cp1251", true);
             PdfFont font_judge = PdfFontFactory.createFont(FONT_JUDGE, "cp1251", true);
 
-            Paragraph weightCategory = new Paragraph(weightCategoryText = "Вес")
-                    .setFont(font)
-                    .setFontSize(27)
-                    .setTextAlignment(TextAlignment.CENTER);
-
-
-            Paragraph fightNumber = new Paragraph(fightNumberText = "Номер боя")
-                    .setFont(font)
-                    .setFontSize(27)
-                    .setTextAlignment(TextAlignment.CENTER);
-
-
             Paragraph tournament = new Paragraph(tournamentText = eventNameList.get(fightNumb))
                     .setFont(font)
                     .setFontSize(15)
                     .setTextAlignment(TextAlignment.CENTER);
 
 
-            Paragraph city = new Paragraph(cityText = "Название города")
+            Paragraph city = new Paragraph(cityText = placeList.get(fightNumb))
                     .setFont(font)
                     .setFontSize(17)
                     .setTextAlignment(TextAlignment.CENTER);
@@ -215,7 +203,7 @@ public class W5FightCard {
                     .setFontSize(19)
                     .setTextAlignment(TextAlignment.LEFT);
 
-            Paragraph refereeNation = new Paragraph(refereeNationText = "Нация рефери")
+            Paragraph refereeNation = new Paragraph(refereeNationText = refereeCountry(refereeText))
                     .setFont(font_judge)
                     .setFontSize(19)
                     .setTextAlignment(TextAlignment.CENTER);
@@ -225,11 +213,20 @@ public class W5FightCard {
                     .setFontSize(19)
                     .setTextAlignment(TextAlignment.LEFT);
 
-            Paragraph judgeNation = new Paragraph(judgeNationText = "Нация судьи")
+            Paragraph judgeNation = new Paragraph(judgeNationText = judgeCountry(judgeText))
                     .setFont(font_judge)
                     .setFontSize(19)
                     .setTextAlignment(TextAlignment.CENTER);
 
+            Paragraph weightCategory = new Paragraph(weightCategoryText = weight(nameRedText))
+                    .setFont(font)
+                    .setFontSize(27)
+                    .setTextAlignment(TextAlignment.CENTER);
+
+            Paragraph fightNumber = new Paragraph(fightNumberText = fightNumb(nameRedText, nameBlueText, refereeText))
+                    .setFont(font)
+                    .setFontSize(27)
+                    .setTextAlignment(TextAlignment.CENTER);
 
             weightCategoryCnvs.add(weightCategory);
             fightNumberCategoryCnvs.add(fightNumber);
@@ -246,9 +243,59 @@ public class W5FightCard {
             judgeNationCnvs.add(judgeNation);
 
             pdfDoc.close();
-            System.out.println("Цикл: "+ docNumb + " завершен");
+           // System.out.println("Цикл: "+ docNumb + " завершен");
         }
 
     }
 
+    private static String refereeCountry(String name) throws SQLException {
+        String[] arr = name.split(" ");
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT country FROM Judges WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        String country = null;
+        while(rs.next()) {
+            country = rs.getString("country");
+        }
+        return country;
+    }
+
+    private static String judgeCountry(String name) throws SQLException {
+        String[] arr = name.split(" ");
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT country FROM Judges WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        String country = null;
+        while(rs.next()) {
+            country = rs.getString("country");
+        }
+        return country;
+    }
+
+    private static String weight(String name) throws SQLException {
+        String[] arr = name.split(" ");
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fighters WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        String weight = null;
+        while(rs.next()) {
+            weight = rs.getString("weight");
+        }
+        return weight;
+    }
+
+    private static String fightNumb(String cornerRed, String cornerBlue, String referee) throws SQLException {
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT fightnumber FROM Fights WHERE cornerred = '"+cornerRed+"' AND cornerblue = '"+cornerBlue+"' AND referee = '"+refereeText+"'");
+        String weight = null;
+        while(rs.next()) {
+            weight = rs.getString("fightnumber");
+        }
+        return weight;
+    }
 }
