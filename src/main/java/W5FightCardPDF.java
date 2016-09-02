@@ -89,7 +89,7 @@ public class W5FightCardPDF {
             refereeList.add(rs.getString("referee"));
 
         }
-
+        connection.close();
         /*
         for (int i = 0; i < eventNameList.size(); i++) {
             System.out.println(eventNameList.get(i) + " " + placeList.get(i) + " " +

@@ -15,6 +15,11 @@ import com.itextpdf.layout.property.TextAlignment;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Created by albert on 02.09.16.
@@ -31,31 +36,51 @@ public class W5JudgesListPDF {
     private static final Color MYRED = new DeviceCmyk(0, 83, 84, 13);
 
 
-    private static String weightCategoryText = "";
-    private static String fightNumberText = "";
-    private static String tournamentText = "";
-    private static String cityText = "";
-    private static String placeText = "";
-    private static String dateText = "";
-    private static String nameRedText = "";
-    private static String nationalityRedText = "";
-    private static String nameBlueText = "";
-    private static String nationalityBlueText = "";
-    private static String refereeText = "";
-    private static String refereeNationText = "";
-    private static String judgeText = "";
-    private static String judgeNationText = "";
-    private static String selectedValue = "";
-    private static String selectedValue2 = "";
+    private static String weightCategoryText;
+    private static String fightNumberText;
+    private static String tournamentText;
+    private static String cityText;
+    private static String placeText;
+    private static String dateText;
+    private static String nameRedText;
+    private static String nameBlueText;
+    private static String judge1Text;
+    private static String judge2Text;
+    private static String judge3Text;
 
-    public static void makeJudgeList() throws IOException {
+    private static ArrayList<String> eventNameList = new ArrayList<String>();
+    private static ArrayList<String> placeList = new ArrayList<String>();
+    private static ArrayList<String> dateList = new ArrayList<String>();
+    private static ArrayList<String> fightNumbList = new ArrayList<String>();
+    private static ArrayList<String> cornerRedList = new ArrayList<String>();
+    private static ArrayList<String> countryRedList = new ArrayList<String>();
+    private static ArrayList<String> cornerBlueList = new ArrayList<String>();
+    private static ArrayList<String> countryBlueList = new ArrayList<String>();
+    private static ArrayList<String> firstJudgeList = new ArrayList<String>();
+    private static ArrayList<String> secondJudgeList = new ArrayList<String>();
+    private static ArrayList<String> thridJudgeList = new ArrayList<String>();
+    private static ArrayList<String> refereeList = new ArrayList<String>();
 
 
-        switch (docNumb) {
-            case 0: judgeText = firstJudgeList.get(fightNumb); break;
-            case 1: judgeText = secondJudgeList.get(fightNumb); break;
-            case 2: judgeText = thridJudgeList.get(fightNumb); break;
-            default: judgeText = "Ошибка";
+    public static void makeJudgeList(int fightNumb) throws IOException, SQLException {
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Fights");
+        while(rs.next()) {
+            eventNameList.add(rs.getString("eventname"));
+            placeList.add(rs.getString("place"));
+            dateList.add(rs.getString("date"));
+            fightNumbList.add(rs.getString("fightnumber"));
+            cornerRedList.add(rs.getString("cornerred"));
+            countryRedList.add(rs.getString("countryred"));
+            cornerBlueList.add(rs.getString("cornerblue"));
+            countryBlueList.add(rs.getString("country"));
+            firstJudgeList.add(rs.getString("firstjudge"));
+            secondJudgeList.add(rs.getString("secondjudge"));
+            thridJudgeList.add(rs.getString("thridjudge"));
+            refereeList.add(rs.getString("referee"));
+
         }
 
         String srcToJudgePdf = System.getProperty("user.home") + "/resources/pdf/judge_list.pdf";
@@ -105,6 +130,33 @@ public class W5JudgesListPDF {
         Canvas fighterBlueCnvs = new Canvas(pdfCanvas, pdfDoc, fighterBlueRct);
 
 
+        Paragraph judge1Prg = new Paragraph(judge1Text)
+                .setFont(font)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.LEFT);
+
+
+        Paragraph judge2Prg = new Paragraph(judge2Text)
+                .setFont(font)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.LEFT);
+
+
+        Paragraph judge3Prg = new Paragraph(judge3Text)
+                .setFont(font)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.LEFT);
+
+        Paragraph fighterRedPrg = new Paragraph(nameRedText)
+                .setFont(fightersFont)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.CENTER);
+
+        Paragraph fighterBluePrg = new Paragraph(nameBlueText)
+                .setFont(fightersFont)
+                .setFontSize(20)
+                .setTextAlignment(TextAlignment.CENTER);
+
         Paragraph weightCategoryPrg = new Paragraph(weightCategoryText)
                 .setFont(font)
                 .setFontSize(27)
@@ -114,34 +166,6 @@ public class W5JudgesListPDF {
                 .setFont(font)
                 .setFontSize(27)
                 .setTextAlignment(TextAlignment.CENTER);
-
-        Paragraph judge1Prg = new Paragraph("Judge1")
-                .setFont(font)
-                .setFontSize(20)
-                .setTextAlignment(TextAlignment.LEFT);
-
-
-        Paragraph judge2Prg = new Paragraph("Judge2")
-                .setFont(font)
-                .setFontSize(20)
-                .setTextAlignment(TextAlignment.LEFT);
-
-
-        Paragraph judge3Prg = new Paragraph("Judge3")
-                .setFont(font)
-                .setFontSize(20)
-                .setTextAlignment(TextAlignment.LEFT);
-
-        Paragraph fighterRedPrg = new Paragraph("Fighter1")
-                .setFont(fightersFont)
-                .setFontSize(20)
-                .setTextAlignment(TextAlignment.CENTER);
-
-        Paragraph fighterBluePrg = new Paragraph("Fighter2")
-                .setFont(fightersFont)
-                .setFontSize(20)
-                .setTextAlignment(TextAlignment.CENTER);
-
 
         Text cityTxt = new Text(cityText + ", ")
                 .setFont(font)
@@ -187,5 +211,29 @@ public class W5JudgesListPDF {
 
     }
 
+    private static String weight(String name) throws SQLException {
+        String[] arr = name.split(" ");
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fighters WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        String weight = null;
+        while(rs.next()) {
+            weight = rs.getString("weight");
+        }
+        return weight;
+    }
+
+    private static String fightNumb(String cornerRed, String cornerBlue, String referee) throws SQLException {
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT fightnumber FROM Fights WHERE cornerred = '"+cornerRed+"' AND cornerblue = '"+cornerBlue+"'");
+        String weight = null;
+        while(rs.next()) {
+            weight = rs.getString("fightnumber");
+        }
+        return weight;
+    }
 
 }

@@ -373,7 +373,8 @@ class TestDrivePDF {
 
     public static void main(String[] args) throws IOException, SQLException {
         for (int i = 0; i < 4; i++) {
-
+            W5FightCardPDF.makeFightCard();
+            W5JudgesListPDF.makeJudgeList();
         }
     }
 
