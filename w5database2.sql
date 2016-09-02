@@ -64,7 +64,7 @@ CREATE TABLE `Fights` (
   `thridjudge` varchar(30) NOT NULL,
   `referee` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `Fights` (
 
 LOCK TABLES `Fights` WRITE;
 /*!40000 ALTER TABLE `Fights` DISABLE KEYS */;
-INSERT INTO `Fights` VALUES (27,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','1','Marko Gurdeljevi?','Slovakia','Greaga Smole','Serbia','Gyorgy Vojvoda','Mladen Kranjcec','Mladen Kranjcec','Jiri Bel'),(28,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','2','Marko Gurdeljevi?','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(29,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','3','Greaga Smole','Slovenia','Mateusz ?ukowski','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(30,'W5 EUROPEAN LEAGUE','REBUY STARS','18.06.2016','4','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(31,'W5 EUROPEAN LEAGUE','REBUY STARS','31.08.2016','5','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Serbia','Jiri Bel','Jiri Bel','Jiri Bel','Mladen Kranjcec'),(32,'W5 EUROPEAN LEAGUE','REBUY STARS','31.08.2016','5','Boris Kuspal','Slovenia','Marko Gurdeljevi?','Brazil','Denis Sidenko','Denis Sidenko','Denis Sidenko','Denis Sidenko');
+INSERT INTO `Fights` VALUES (33,'FORTUNE FAVORS THE BRAVE','REBUY STARS','18.06.2016','1','Boris Kuspal','Slovakia','Marko Gurdeljevi?','Slovakia','Gyorgy Vojvoda','Mladen Kranjcec','Denis Sidenko','Jiri Bel'),(34,'FORTUNE FAVORS THE BRAVE','REBUY STARS','18.06.2016','2','Boris Kuspal','Slovakia','Marko Gurdeljevi?','Slovakia','Gyorgy Vojvoda','Jiri Bel','Denis Sidenko','Mladen Kranjcec'),(35,'FORTUNE FAVORS THE BRAVE','REBUY STARS','18.06.2016','3','Greaga Smole','Slovakia','Mateusz ?ukowski','Slovakia','Denis Sidenko','Igor Shimdt','Jiri Bel','Mladen Kranjcec'),(36,'FORTUNE FAVORS THE BRAVE','REBUY STARS','18.06.2016','4','Boris Kuspal','Slovakia','Mateusz ?ukowski','Slovakia','Igor Shimdt','Jiri Bel','Gyorgy Vojvoda','Mladen Kranjcec');
 /*!40000 ALTER TABLE `Fights` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-29  5:26:41
+-- Dump completed on 2016-09-02  5:42:18

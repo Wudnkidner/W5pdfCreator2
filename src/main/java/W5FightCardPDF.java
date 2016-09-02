@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by albert on 31.08.16.
  */
-public class W5FightCard {
+public class W5FightCardPDF {
 
     private static String src = System.getProperty("user.home") + "/resources/pdf/clear.pdf";
     private static String destToFightCard;
