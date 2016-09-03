@@ -104,7 +104,10 @@ public class W5FightCardPDF {
         makePDF(index);
     }
 
-    public static void makePDF (int fightNumb) throws IOException, SQLException {
+    private static void makePDF (int fightNumb) throws IOException, SQLException {
+
+        System.out.println(fightNumb);
+
         for (int docNumb = 0; docNumb < 3; docNumb++) {
             switch (docNumb) {
                 case 0: judgeText = firstJudgeList.get(fightNumb); break;
@@ -113,7 +116,7 @@ public class W5FightCardPDF {
                     default: judgeText = "Ошибка";
             }
       
-            destToFightCard = System.getProperty("user.home") + "/result/Fight" + (fightNumb+1) + ", Judge " + judgeText + ".pdf";
+            destToFightCard = System.getProperty("user.home") + "/result/Fight" + (fightNumb +1) + ", Judge " + judgeText + ".pdf";
             File createFightCard = new File(destToFightCard);
             createFightCard.getParentFile().mkdirs();
 

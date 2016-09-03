@@ -41,22 +41,22 @@ public class W5PDFCreator {
     private static final Color MYBLUE = new DeviceCmyk(70, 30, 0, 18);
     private static final Color MYRED = new DeviceCmyk(0, 83, 84, 13);
 
-    private static String weightCategoryText = "";
-    private static String fightNumberText = "";
-    private static String tournamentText = "";
-    private static String cityText = "";
-    private static String placeText = "";
-    private static String dateText = "";
-    private static String nameRedText = "";
-    private static String nationalityRedText = "";
-    private static String nameBlueText = "";
-    private static String nationalityBlueText = "";
-    private static String refereeText = "";
-    private static String refereeNationText = "";
-    private static String judgeText = "";
-    private static String judgeNationText = "";
-    private static String selectedValue = "";
-    private static String selectedValue2 = "";
+    private static String weightCategoryText;
+    private static String fightNumberText;
+    private static String tournamentText;
+    private static String cityText;
+    private static String placeText;
+    private static String dateText;
+    private static String nameRedText;
+    private static String nationalityRedText;
+    private static String nameBlueText;
+    private static String nationalityBlueText;
+    private static String refereeText;
+    private static String refereeNationText;
+    private static String judgeText;
+    private static String judgeNationText;
+    private static String selectedValue;
+    private static String selectedValue2;
 
     private static ArrayList<String> eventNameList = new ArrayList<String>();
     private static ArrayList<String> placeList = new ArrayList<String>();
@@ -372,9 +372,11 @@ public class W5PDFCreator {
 class TestDrivePDF {
 
     public static void main(String[] args) throws IOException, SQLException {
-        for (int i = 0; i < 4; i++) {
-            W5FightCardPDF.makeFightCard();
-            W5JudgesListPDF.makeJudgeList();
+        for (int i = 0; i < 2; i++) {
+            //W5FightCardPDF.makeFightCard(i);
+            //W5JudgesListPDF.makeJudgeList(i);
+            //W5DiplomaPDF.makeDiploma(i);
+            W5MedicalPDF.makeMedical(i);
         }
     }
 
