@@ -87,7 +87,12 @@ public class W5PDFCreator {
 class TestDrivePDF {
 
     public static void main(String[] args) throws IOException, SQLException {
-        for (int i = 0; i < 2; i++) {
+
+
+
+        //
+
+        for (int i = 0; i < W5MySQLRequests.getFightsList().size(); i++) {
             //W5FightCardPDF.makeFightCard(i);
             //W5JudgesListPDF.makeJudgeList(i);
             //W5DiplomaPDF.makeDiploma(i);

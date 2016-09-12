@@ -69,7 +69,7 @@ public class W5FightCardPDF {
     private static ArrayList<String> refereeList = new ArrayList<String>();
 
 
-    public static void makeFightCard(int index) throws IOException, SQLException {
+    public static void makeFightCard(int fightNumb) throws IOException, SQLException {
 
         Connection connection = W5MySQLConnection.getConnection();
         Statement stmt = connection.createStatement();
@@ -82,7 +82,7 @@ public class W5FightCardPDF {
             cornerRedList.add(rs.getString("cornerred"));
             countryRedList.add(rs.getString("countryred"));
             cornerBlueList.add(rs.getString("cornerblue"));
-            countryBlueList.add(rs.getString("country"));
+            countryBlueList.add(rs.getString("countryblue"));
             firstJudgeList.add(rs.getString("firstjudge"));
             secondJudgeList.add(rs.getString("secondjudge"));
             thridJudgeList.add(rs.getString("thridjudge"));
@@ -101,7 +101,7 @@ public class W5FightCardPDF {
                     + " " + refereeList.get(i));
         }
         */
-        makePDF(index);
+        makePDF(fightNumb);
     }
 
     private static void makePDF (int fightNumb) throws IOException, SQLException {
@@ -116,7 +116,7 @@ public class W5FightCardPDF {
                     default: judgeText = "Ошибка";
             }
       
-            destToFightCard = System.getProperty("user.home") + "/result/Fight" + (fightNumb +1) + ", Judge " + judgeText + ".pdf";
+            destToFightCard = System.getProperty("user.home") + "/result/Fight" + (fightNumb+1) + ", Judge " + judgeText + ".pdf";
             File createFightCard = new File(destToFightCard);
             createFightCard.getParentFile().mkdirs();
 
@@ -221,7 +221,7 @@ public class W5FightCardPDF {
                     .setFontSize(19)
                     .setTextAlignment(TextAlignment.CENTER);
 
-            Paragraph weightCategory = new Paragraph(weightCategoryText = weight(nameRedText))
+            Paragraph weightCategory = new Paragraph(weightCategoryText = weight(fightNumb))
                     .setFont(font)
                     .setFontSize(27)
                     .setTextAlignment(TextAlignment.CENTER);
@@ -261,6 +261,7 @@ public class W5FightCardPDF {
         while(rs.next()) {
             country = rs.getString("country");
         }
+        connection.close();
         return country;
     }
 
@@ -274,19 +275,21 @@ public class W5FightCardPDF {
         while(rs.next()) {
             country = rs.getString("country");
         }
+        connection.close();
         return country;
     }
 
-    private static String weight(String name) throws SQLException {
-        String[] arr = name.split(" ");
+    private static String weight(int fightNumb) throws SQLException {
+
 
         Connection connection = W5MySQLConnection.getConnection();
         Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fighters WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fights WHERE fightnumber = "+ "'"+(fightNumb+1)+"'");
         String weight = null;
         while(rs.next()) {
             weight = rs.getString("weight");
         }
+        connection.close();
         return weight;
     }
 
@@ -299,6 +302,7 @@ public class W5FightCardPDF {
         while(rs.next()) {
             weight = rs.getString("fightnumber");
         }
+        connection.close();
         return weight;
     }
 }

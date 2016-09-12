@@ -24,7 +24,7 @@ public class W5MySQLRequests {
 
     public static void insertRow (
             String tournamentText, String placeText, String dateText,
-            String fightNumText, String fighterRedText, String countryRedText,
+            String fightNumText, String weightText, String fighterRedText, String countryRedText,
             String fighterBlueText, String countryBlueText, String judge1Text,
             String judge2Text, String judge3Text, String refereeText) throws SQLException{
 
@@ -32,28 +32,29 @@ public class W5MySQLRequests {
 
         String insertString =
                 "INSERT INTO Fights"+
-                "(eventname, place, date, fightnumber, cornerred,countryred," +
-                "cornerblue,country,firstjudge,secondjudge,thridjudge, referee)" +
+                "(eventname, place, date, fightnumber, weight, cornerred,countryred," +
+                "cornerblue,countryblue,firstjudge,secondjudge,thridjudge, referee)" +
                 "VALUES" +
-                "(?,?,?,?,?,?,?,?,?,?,?,?)";
+                "(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         if ( connection != null) {
-        PreparedStatement preparedStmt = connection.prepareStatement(insertString);
-        preparedStmt.setString(1, tournamentText);
-        preparedStmt.setString(2, placeText);
-        preparedStmt.setString(3, dateText);
-        preparedStmt.setString(4, fightNumText);
-        preparedStmt.setString(5, fighterRedText);
-        preparedStmt.setString(6, countryRedText);
-        preparedStmt.setString(7, fighterBlueText);
-        preparedStmt.setString(8, countryBlueText);
-        preparedStmt.setString(9, judge1Text);
-        preparedStmt.setString(10, judge2Text);
-        preparedStmt.setString(11, judge3Text);
-        preparedStmt.setString(12, refereeText);
-        preparedStmt.execute();
-        connection.close();
-        W5CreateFightStage.setStatus("Compleate");
+            PreparedStatement preparedStmt = connection.prepareStatement(insertString);
+            preparedStmt.setString(1, tournamentText);
+            preparedStmt.setString(2, placeText);
+            preparedStmt.setString(3, dateText);
+            preparedStmt.setString(4, fightNumText);
+            preparedStmt.setString(5, weightText);
+            preparedStmt.setString(6, fighterRedText);
+            preparedStmt.setString(7, countryRedText);
+            preparedStmt.setString(8, fighterBlueText);
+            preparedStmt.setString(9, countryBlueText);
+            preparedStmt.setString(10, judge1Text);
+            preparedStmt.setString(11, judge2Text);
+            preparedStmt.setString(12, judge3Text);
+            preparedStmt.setString(13, refereeText);
+            preparedStmt.execute();
+            connection.close();
+            W5CreateFightStage.setStatus("Compleate");
         } else {
             W5CreateFightStage.setStatus("Error");
         }
@@ -195,9 +196,9 @@ public class W5MySQLRequests {
         while(rs.next()) {
             fightsList.add(new W5FightsData(rs.getString("eventname"),
                     rs.getString("place"), rs.getString("date"),
-                    rs.getString("fightnumber"), rs.getString("cornerred"),
+                    rs.getString("fightnumber"), rs.getString("weight"), rs.getString("cornerred"),
                     rs.getString("countryred"),  rs.getString("cornerblue"),
-                    rs.getString("country"),  rs.getString("firstjudge"),
+                    rs.getString("countryblue"),  rs.getString("firstjudge"),
                     rs.getString("secondjudge"),  rs.getString("thridjudge"),
                     rs.getString("referee")
                     ));

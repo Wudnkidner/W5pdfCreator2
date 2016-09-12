@@ -119,7 +119,7 @@ public class W5DiplomaPDF {
                     .setFontSize(19);
 
 
-            Text weightCategory = new Text(weightCategoryText = weight(fighterName))
+            Text weightCategory = new Text(weightCategoryText = weight(fightNumb))
                     .setFont(font)
                     .setFontColor(MYGRAY)
                     .setFontSize(19);
@@ -151,6 +151,7 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             eventname = rs.getString("eventname");
         }
+        connection.close();
         return eventname;
     }
 
@@ -163,6 +164,7 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             eventDate = rs.getString("date");
         }
+        connection.close();
         return eventDate;
     }
 
@@ -175,6 +177,7 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             eventCity = rs.getString("city");
         }
+        connection.close();
         return eventCity;
     }
 
@@ -187,6 +190,7 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             eventPlace = rs.getString("place");
         }
+        connection.close();
         return eventPlace;
     }
 
@@ -199,6 +203,7 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             cornerRed = rs.getString("cornerred");
         }
+        connection.close();
         return cornerRed;
     }
 
@@ -211,19 +216,20 @@ public class W5DiplomaPDF {
         while(rs.next()) {
             cornerBlue = rs.getString("cornerblue");
         }
+        connection.close();
         return cornerBlue;
     }
 
-    private static String weight(String name) throws SQLException {
-        String[] arr = name.split(" ");
+    private static String weight(int fightNumb) throws SQLException {
 
         Connection connection = W5MySQLConnection.getConnection();
         Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fighters WHERE firstname = '"+arr[0]+"' AND lastname = '"+arr[1]+"'");
+        ResultSet rs = stmt.executeQuery("SELECT weight FROM Fights WHERE fightnumber = "+ "'"+fightNumb+"'");
         String weight = null;
         while(rs.next()) {
             weight = rs.getString("weight");
         }
+        connection.close();
         return weight;
     }
 

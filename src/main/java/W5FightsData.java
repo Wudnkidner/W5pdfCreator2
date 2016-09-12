@@ -10,6 +10,7 @@ public class W5FightsData {
     private final SimpleStringProperty eventNameSSP;
     private final SimpleStringProperty placeSSP;
     private final SimpleStringProperty dateSSP;
+    private final SimpleStringProperty weightSSP;
     private final SimpleStringProperty fightNumbSSP;
     private final SimpleStringProperty cornerRedSSP;
     private final SimpleStringProperty countryRedSSP;
@@ -21,13 +22,14 @@ public class W5FightsData {
     private final SimpleStringProperty refereeSSP;
 
     public W5FightsData (String eventName, String place, String date,
-                          String fightNumb, String cornerRed, String countryRed,
+                          String fightNumb, String weight, String cornerRed, String countryRed,
                           String cornerBlue, String countryBlue, String firstJudge,
                           String secondJudge,String thridJudge, String referee) {
         this.eventNameSSP = new SimpleStringProperty(eventName);
         this.placeSSP = new SimpleStringProperty(place);
         this.dateSSP = new SimpleStringProperty(date);
         this.fightNumbSSP = new SimpleStringProperty(fightNumb);
+        this.weightSSP = new SimpleStringProperty(weight);
         this.cornerRedSSP = new SimpleStringProperty(cornerRed);
         this.countryRedSSP = new SimpleStringProperty(countryRed);
         this.cornerBlueSSP = new SimpleStringProperty(cornerBlue);
@@ -68,6 +70,14 @@ public class W5FightsData {
 
     public void setFightNumb(String fightNumb) {
         fightNumbSSP.set(fightNumb);
+    }
+
+    public String getWeight() {
+        return weightSSP.get();
+    }
+
+    public void setWeight(String weight) {
+        weightSSP.set(weight);
     }
 
     public String getCornerRed() {

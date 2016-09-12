@@ -21,9 +21,17 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class W5CreateFightStage {
+
+	private static TextField fighterRedTF = new TextField();
+	private static TextField fighterBlueTF = new TextField();
+
+	private static W5Search fighterRedSearch = new W5Search();
+	private static W5Search fighterBlueSearch = new W5Search();
+
 
 	private static ComboBox tournamentCBox;
 	private static ComboBox placeCBox;
@@ -31,8 +39,8 @@ public class W5CreateFightStage {
 	private static ComboBox fightNumCBox;
 	private static ComboBox weightCBox;
 	private static ComboBox fighterRedCBox;
-	private static ComboBox fighterBlueCBox;
 	private static ComboBox countryRedCBox;
+	private static ComboBox fighterBlueCBox;
 	private static ComboBox countryBlueCBox;
 	private static ComboBox judge1CBox;
 	private static ComboBox judge2CBox;
@@ -78,7 +86,7 @@ public class W5CreateFightStage {
 
 		Scene scene = new Scene(new Group());
 		//GridPane
-		gridPane.setPrefSize(1280, 200);
+		gridPane.setPrefSize(1280, 400);
 		gridPane.setVgap(5);
 		gridPane.setHgap(10);
 		gridPane.setPadding(new Insets(10.0));
@@ -86,12 +94,14 @@ public class W5CreateFightStage {
 		gridPane.addRow(0, new Label("Event name:"), W5CreateFightStage.createTournamentCBox());
 		gridPane.addRow(1, new Label("Place:") ,W5CreateFightStage.createPlaceCBox(),new Label("Date:"), W5CreateFightStage.createDateCBox());
 		gridPane.addRow(2, new Label("Fight number:"), createFightNumCBox(), new Label("Weight:"), createWeightCBox());
-		gridPane.addRow(3, new Label("Fighter red:"), createFighterRedCBox(), new Label("Fighter blue:"), createFighterBlueCBox());
-		gridPane.addRow(4, new Label("Country red:"), createCountryRedCBox(), new Label("Country blue:"), createCountryBlueCBox());
-		gridPane.addRow(5, new Label("First judge:"), createJudge1CBox(), new Label("Second judge:"),createJudge2CBox(), new Label("Third judge: "), createJudge3CBox());
-		gridPane.addRow(6, new Label("Referee:"), createRefereeCBox());
-		gridPane.addRow(7, new Label(""),createAddBtn(), createDeleteBtn(), W5Buttons.setBackBtn(stage));
-		gridPane.addRow(8, new Label("Status: "), statusLbl);
+		gridPane.addRow(3, new Label("Fighter red:"), fighterRedTF, new Label("Fighter blue:"), fighterBlueTF);
+		gridPane.addRow(4, new Label(""), fighterRedSearch.createListView(fighterRedTF) , new Label(""), fighterRedSearch.createListView(fighterBlueTF));
+		gridPane.addRow(5, new Label("Country red:"), createCountryRedCBox(), new Label("Country blue:"), createCountryBlueCBox());
+		gridPane.addRow(6, new Label("First judge:"), createJudge1CBox(), new Label("Second jdge:"),createJudge2CBox(), new Label("Third judge: "), createJudge3CBox());
+		gridPane.addRow(7, new Label("Referee:"), createRefereeCBox());
+		gridPane.addRow(8, new Label(""),createAddBtn(), createDeleteBtn(), W5Buttons.setBackBtn(stage));
+		gridPane.addRow(9, new Label("Status: "), statusLbl);
+
 		//TableView
 		tableView.setPrefSize(1280, 300);
 		tableView.setEditable(true);
@@ -115,9 +125,15 @@ public class W5CreateFightStage {
 		);
 
 		TableColumn fightNumbTC = new TableColumn("Fight №");
-		fightNumbTC.setMinWidth(100);
+		fightNumbTC.setMinWidth(60);
 		fightNumbTC.setCellValueFactory(
 				new PropertyValueFactory<W5FightsData, String>("fightNumb")
+		);
+
+		TableColumn weightTC = new TableColumn("Weight");
+		weightTC.setMinWidth(60);
+		weightTC.setCellValueFactory(
+				new PropertyValueFactory<W5FightsData, String>("weight")
 		);
 
 		TableColumn cornerRedTC = new TableColumn("Corner red");
@@ -166,7 +182,7 @@ public class W5CreateFightStage {
 				new PropertyValueFactory<W5FightsData, String>("referee")
 		);
 		tableView.setItems(data);
-		tableView.getColumns().addAll(eventNameTC, placeTC, dateTC, fightNumbTC, cornerRedTC,
+		tableView.getColumns().addAll(eventNameTC, placeTC, dateTC, fightNumbTC, weightTC, cornerRedTC,
 				countryRedTC, cornerBlueTC, countryBlueTC, firstJudgeTC,
 				secondJudgeTC,thridJudgeTC,refereeTC);
 
@@ -182,6 +198,7 @@ public class W5CreateFightStage {
 
 	}
 
+
 	private static Button createAddBtn () throws SQLException {
 		Button addBtn = new Button();
 		addBtn.setPrefWidth(156);
@@ -192,8 +209,8 @@ public class W5CreateFightStage {
 				try {
 					data.clear();//"обнуляю" ячейки в tableview
 					W5MySQLRequests.insertRow(tournamentText, placeText, dateText,
-                            fightNumText, fighterRedText, countryRedText,
-                            fighterBlueText, countryBlueText, judge1Text,
+                            fightNumText,  weightText, fighterRedTF.getText(), countryRedText,
+                            fighterBlueTF.getText(), countryBlueText, judge1Text,
                             judge2Text, judge3Text, refereeText);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -204,7 +221,9 @@ public class W5CreateFightStage {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
+				fighterRedTF.clear();
+				fighterBlueTF.clear();
+				weightCBox.getSelectionModel().clearSelection();
 			}
 		}) ;
 
@@ -287,7 +306,12 @@ public class W5CreateFightStage {
 
 	private static ComboBox createWeightCBox () throws SQLException {
 		weightCBox = new ComboBox();
-		weightCBox.getItems().addAll(W5MySQLRequests.getWeightList());
+		ArrayList<String> allWC= new ArrayList();
+		for (double i = 50; i < 150; i+=0.5) {
+			allWC.add(Double.toString(i));
+		}
+		weightCBox.getItems().addAll(allWC);
+		//weightCBox.getItems().addAll(W5MySQLRequests.getWeightList());
 		weightCBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -320,6 +344,7 @@ public class W5CreateFightStage {
 		});
 		return fighterBlueCBox;
 	}
+
 
 	private static ComboBox createCountryRedCBox () throws SQLException {
 		countryRedCBox = new ComboBox();
@@ -414,6 +439,14 @@ public class W5CreateFightStage {
 			}
 		});
 		new Thread(sleeper).start();
+	}
+
+	public static void setFighterRedText(String txt) {
+		fighterRedText = txt;
+	}
+
+	public static void setFighterBlueText(String txt) {
+		fighterBlueText = txt;
 	}
 
 }

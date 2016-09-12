@@ -54,6 +54,7 @@ public class W5WeightInPDF {
     private static ArrayList<String> placeList = new ArrayList<String>();
     private static ArrayList<String> dateList = new ArrayList<String>();
     private static ArrayList<String> fightNumbList = new ArrayList<String>();
+    private static ArrayList<String> weightList = new ArrayList<String>();
     private static ArrayList<String> cornerRedList = new ArrayList<String>();
     private static ArrayList<String> countryRedList = new ArrayList<String>();
     private static ArrayList<String> cornerBlueList = new ArrayList<String>();
@@ -64,7 +65,7 @@ public class W5WeightInPDF {
     private static ArrayList<String> refereeList = new ArrayList<String>();
 
     public static void makeWeightIn(int fightNumb) throws IOException, SQLException {
-        fightNumb += 1;//Костыль для правильного отображения номера раунда
+
         Connection connection = W5MySQLConnection.getConnection();
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Fights");
@@ -73,10 +74,11 @@ public class W5WeightInPDF {
             placeList.add(rs.getString("place"));
             dateList.add(rs.getString("date"));
             fightNumbList.add(rs.getString("fightnumber"));
+            weightList.add(rs.getString("weight"));
             cornerRedList.add(rs.getString("cornerred"));
             countryRedList.add(rs.getString("countryred"));
             cornerBlueList.add(rs.getString("cornerblue"));
-            countryBlueList.add(rs.getString("country"));
+            countryBlueList.add(rs.getString("countryblue"));
             firstJudgeList.add(rs.getString("firstjudge"));
             secondJudgeList.add(rs.getString("secondjudge"));
             thridJudgeList.add(rs.getString("thridjudge"));
@@ -119,7 +121,7 @@ public class W5WeightInPDF {
         ArrayList<Rectangle> Page2CountryBlueRct = new ArrayList<Rectangle>();
 
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 12) {
                 if (index != 0) y += 0.2;
                 Page1NameRedRct.add(new Rectangle(x, y, weight, height));
@@ -153,7 +155,7 @@ public class W5WeightInPDF {
         ArrayList<Rectangle> Page2NameBlue2Rct = new ArrayList<Rectangle>();
         ArrayList<Rectangle> Page2CountryBlue2Rct = new ArrayList<Rectangle>();
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 12) {
                 if (index != 0) y2 += 0.2;
                 Page1NameRed2Rct.add(new Rectangle(x2, y2, weight2 + 5, height2));
@@ -193,7 +195,7 @@ public class W5WeightInPDF {
         ArrayList<Canvas> Page2NameBlueCnvs = new ArrayList<Canvas>();
         ArrayList<Canvas> Page2CountryBlueCnvs = new ArrayList<Canvas>();
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 12) {
                 Page1NameRedCnvs.add(new Canvas(pdfCanvas1, pdfDoc, Page1NameRedRct.get(index)));
                 Page1CountryRedCnvs.add(new Canvas(pdfCanvas1, pdfDoc, Page1CountryRedRct.get(index)));
@@ -221,7 +223,7 @@ public class W5WeightInPDF {
         ArrayList<Canvas> Page2NameBlue2Cnvs = new ArrayList<Canvas>();
         ArrayList<Canvas> Page2CountryBlue2Cnvs = new ArrayList<Canvas>();
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 12) {
                 Page1NameRed2Cnvs.add(new Canvas(pdfCanvas1, pdfDoc, Page1NameRed2Rct.get(index)));
                 Page1CountryRed2Cnvs.add(new Canvas(pdfCanvas1, pdfDoc, Page1CountryRed2Rct.get(index)));
@@ -249,7 +251,7 @@ public class W5WeightInPDF {
         ArrayList<Paragraph> Page2NameBluePrg = new ArrayList<Paragraph>();
         ArrayList<Paragraph> Page2CountryBluePrg = new ArrayList<Paragraph>();
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 24) {
                 Page1NameRedPrg.add(new Paragraph(cornerRedList.get(index)).setFontSize(12).setFont(font));
                 Page1CountryRedPrg.add(new Paragraph(countryRedList.get(index)).setTextAlignment(TextAlignment.CENTER).setFontSize(12).setFont(font));
@@ -276,7 +278,7 @@ public class W5WeightInPDF {
         ArrayList<Paragraph> Page2NameBlue2Prg = new ArrayList<Paragraph>();
         ArrayList<Paragraph> Page2CountryBlue2Prg = new ArrayList<Paragraph>();
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 24) {
                 Page1NameRed2Prg.add(new Paragraph(cornerRedList.get(index)).setFontSize(12).setFont(font));
                 Page1CountryRed2Prg.add(new Paragraph(countryRedList.get(index)).setTextAlignment(TextAlignment.CENTER).setFontSize(10).setFont(font));
@@ -320,7 +322,7 @@ public class W5WeightInPDF {
         Page2tourCanvas.add(tournamentPrg);
 
 
-        for (int index = 0; index < cornerRedList.size(); index++) {
+        for (int index = 0; index < cornerRedList.size() / 2; index++) {
 
             int counterEven = countEven(index);
             int counterOdd = counterEven + 1;

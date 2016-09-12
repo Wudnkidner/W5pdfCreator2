@@ -263,6 +263,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             eventname = rs.getString("eventname");
         }
+        connection.close();
         return eventname;
     }
 
@@ -275,6 +276,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             eventDate = rs.getString("date");
         }
+        connection.close();
         return eventDate;
     }
 
@@ -287,6 +289,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             eventCity = rs.getString("city");
         }
+        connection.close();
         return eventCity;
     }
 
@@ -299,6 +302,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             eventPlace = rs.getString("place");
         }
+        connection.close();
         return eventPlace;
     }
 
@@ -311,6 +315,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             cornerRed = rs.getString("cornerred");
         }
+        connection.close();
         return cornerRed;
     }
 
@@ -323,6 +328,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             cornerBlue = rs.getString("cornerblue");
         }
+        connection.close();
         return cornerBlue;
     }
 
@@ -335,6 +341,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             judgeName = rs.getString("firstjudge");
         }
+        connection.close();
         return judgeName;
     }
 
@@ -347,6 +354,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             judgeName = rs.getString("secondjudge");
         }
+        connection.close();
         return judgeName;
     }
 
@@ -359,6 +367,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             judgeName = rs.getString("thridjudge");
         }
+        connection.close();
         return judgeName;
     }
 
@@ -372,6 +381,7 @@ public class W5MedicalPDF {
         while(rs.next()) {
             weight = rs.getString("weight");
         }
+        connection.close();
         return weight;
     }
 
