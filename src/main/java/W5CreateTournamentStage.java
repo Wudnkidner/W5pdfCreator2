@@ -51,15 +51,15 @@ public class W5CreateTournamentStage {
 
 
 	public static String getTournamentNameText () {
-		return tournamentTFld.getText();
+		return tournamentTFld.getText().toUpperCase();
 	}
 
 	public static String getTournamentCityText () {
-		return cityTFld.getText();
+		return cityTFld.getText().toUpperCase();
 	}
 
 	public static String getTournamentPlaceText () {
-		return placeTFld.getText();
+		return placeTFld.getText().toUpperCase();
 	}
 
 	public static String getTournamentDateText () {

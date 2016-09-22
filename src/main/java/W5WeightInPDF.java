@@ -123,6 +123,7 @@ public class W5WeightInPDF {
 
         for (int index = 0; index < cornerRedList.size() / 2; index++) {
             if (index < 12) {
+
                 if (index != 0) y += 0.2;
                 Page1NameRedRct.add(new Rectangle(x, y, weight, height));
                 Page1CountryRedRct.add(new Rectangle(x + 100, y, weight - 42, height));
@@ -132,6 +133,7 @@ public class W5WeightInPDF {
             }
 
             if (index >= 12 && index < 24) {
+
                 if (index != 12) y += 0.2;
                 Page2NameRedRct.add(new Rectangle(x, y, weight, height));
                 Page2CountryRedRct.add(new Rectangle(x + 100, y, weight - 42, height));

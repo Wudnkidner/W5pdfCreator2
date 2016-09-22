@@ -77,7 +77,7 @@ public class W5DiplomaPDF {
             PdfCanvas pdfCanvas = new PdfCanvas(page);
 
             Rectangle nameFighterRct = new Rectangle(260, 500, 300, 40);
-            Rectangle tournamentRct = new Rectangle(205, 365, 400, 40);
+            Rectangle tournamentRct = new Rectangle(205, 366, 400, 40);
             Rectangle cityRct = new Rectangle(205, 335, 400, 40);
             Rectangle weightCategoryRct = new Rectangle(205, 307, 400, 40);
 
@@ -120,7 +120,7 @@ public class W5DiplomaPDF {
 
 
             Text weightCategory = new Text(weightCategoryText = weight(fightNumb))
-                    .setFont(font)
+                    .setFont(condaraRegularFont)
                     .setFontColor(MYGRAY)
                     .setFontSize(19);
 
@@ -230,6 +230,12 @@ public class W5DiplomaPDF {
             weight = rs.getString("weight");
         }
         connection.close();
+        String[] filter = weight.split("\\.");
+        if (filter[1].equals("0")) {
+            weight = filter[0];
+        } else {
+            weight = filter[0]+"."+filter[1];
+        }
         return weight;
     }
 

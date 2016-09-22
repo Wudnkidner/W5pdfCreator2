@@ -18,7 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -101,6 +103,8 @@ public class W5CreateFightStage {
 		gridPane.addRow(7, new Label("Referee:"), createRefereeCBox());
 		gridPane.addRow(8, new Label(""),createAddBtn(), createDeleteBtn(), W5Buttons.setBackBtn(stage));
 		gridPane.addRow(9, new Label("Status: "), statusLbl);
+		gridPane.addRow(10, new Label(""),new Label(""),new Label(""),new Label(""));
+		gridPane.addRow(11, new Label(""),new Label(""),new Label(""),createMakePDFBtn());
 
 		//TableView
 		tableView.setPrefSize(1280, 300);
@@ -198,6 +202,40 @@ public class W5CreateFightStage {
 
 	}
 
+
+
+	private static Button createMakePDFBtn () throws SQLException {
+		Button addBtn = new Button();
+		addBtn.setPrefWidth(156);
+		addBtn.setText("CreatePDF");
+		addBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event)  {
+				try {
+					Connection connection = W5MySQLConnection.getConnection();
+					Statement stmt = connection.createStatement();
+					ResultSet rs = stmt.executeQuery("SELECT * FROM Fights");
+					ArrayList<String> countFight = new ArrayList<String>();
+					while(rs.next()) {
+						countFight.add(rs.getString("fightnumber"));
+					}
+					connection.close();
+					for (int i = 0; i < countFight.size(); i++) {
+						W5FightCardPDF.makeFightCard(i);
+						W5JudgesListPDF.makeJudgeList(i);
+						W5DiplomaPDF.makeDiploma(i);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}) ;
+
+		return addBtn;
+	}
 
 	private static Button createAddBtn () throws SQLException {
 		Button addBtn = new Button();

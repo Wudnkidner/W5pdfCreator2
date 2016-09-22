@@ -54,7 +54,7 @@ public class W5MySQLRequests {
             preparedStmt.setString(13, refereeText);
             preparedStmt.execute();
             connection.close();
-            W5CreateFightStage.setStatus("Compleate");
+            W5CreateFightStage.setStatus("Complete");
         } else {
             W5CreateFightStage.setStatus("Error");
         }
