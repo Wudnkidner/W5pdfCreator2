@@ -126,8 +126,8 @@ public class W5FightCardPDF {
 
             PdfPage page = pdfDoc.getPage(1);
             PdfCanvas pdfCanvas = new PdfCanvas(page);
-            Rectangle weightCategoryRct = new Rectangle(354, 730, 78, 40);
-            Rectangle fightNumberRct = new Rectangle(496, 730, 62, 40);
+            Rectangle weightCategoryRct = new Rectangle(354, 733, 78, 40);
+            Rectangle fightNumberRct = new Rectangle(496, 733, 62, 40);
             Rectangle tournamentRct = new Rectangle(125, 681, 188, 40);
             Rectangle cityRct = new Rectangle(350, 683, 84, 40);
             Rectangle dateRct = new Rectangle(470, 682, 91, 40);
@@ -167,7 +167,7 @@ public class W5FightCardPDF {
                     .setTextAlignment(TextAlignment.CENTER);
 
 
-            Paragraph city = new Paragraph(cityText = placeList.get(fightNumb))
+            Paragraph city = new Paragraph(cityText = getCity(eventNameList.get(fightNumb)))
                     .setFont(font)
                     .setFontSize(17)
                     .setTextAlignment(TextAlignment.CENTER);
@@ -291,6 +291,18 @@ public class W5FightCardPDF {
         }
         connection.close();
         return weight;
+    }
+
+    private static String getCity(String eventName) throws SQLException {
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT city FROM Tournaments WHERE name = "+ "'"+(eventName)+"'");
+        String city = "";
+        while(rs.next()) {
+            city = rs.getString("city");
+        }
+        connection.close();
+        return city;
     }
 
     private static String fightNumb(String cornerRed, String cornerBlue, String referee) throws SQLException {
