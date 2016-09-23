@@ -166,14 +166,6 @@ public class W5FightCardPDF {
                     .setFontSize(15)
                     .setTextAlignment(TextAlignment.CENTER);
 
-
-
-
-
-
-
-
-
             Paragraph city = new Paragraph(cityText = getCity(eventNameList.get(fightNumb)))
                     .setFont(font)
                     .setFontSize(17)
