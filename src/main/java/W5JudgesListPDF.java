@@ -33,7 +33,7 @@ public class W5JudgesListPDF {
 
 
     private static final Color MYBLUE = new DeviceCmyk(70, 30, 0, 18);
-    private static final Color MYRED = new DeviceCmyk(0, 83, 84, 13);
+    private static final Color MYRED = new DeviceCmyk(3, 96, 91, 0);//(0, 83, 84, 13)
 
 
     private static String weightCategoryText;
@@ -69,6 +69,7 @@ public class W5JudgesListPDF {
         String destToJudgePdf = System.getProperty("user.home") + "/result/Fight" + (fightNumb+1) + ", judge_list.pdf";
 
         PdfFont font = PdfFontFactory.createFont(FONT, "Cp1251", true);
+        PdfFont fontJudges = PdfFontFactory.createFont(FONT_JUDGE, "Cp1251", true);
 
         final String FONT_FIGTERS = System.getProperty("user.home") + "/resources/fonts/OpenSans-ExtraBold.ttf";
         PdfFont fightersFont = PdfFontFactory.createFont(FONT_FIGTERS, "cp1251", true);
@@ -90,13 +91,13 @@ public class W5JudgesListPDF {
 
         Rectangle dateRct = new Rectangle(55, 477, 450, 40);
         Rectangle tournamentRct = new Rectangle(55, 450, 460, 40);
-        Rectangle weightCategoryRct = new Rectangle(609, 476, 78, 40);
-        Rectangle fightNumberRct = new Rectangle(750, 476, 60, 40);
+        Rectangle weightCategoryRct = new Rectangle(609, 479, 78, 40);
+        Rectangle fightNumberRct = new Rectangle(750, 479, 60, 40);
         Rectangle judge1 = new Rectangle(55, 352, 282, 40);
         Rectangle judge2 = new Rectangle(55, 328, 282, 40);
         Rectangle judge3 = new Rectangle(55, 304, 282, 40);
-        Rectangle fighterRedRct = new Rectangle(342, 419, 210, 40);
-        Rectangle fighterBlueRct = new Rectangle(596, 419, 210, 40);
+        Rectangle fighterRedRct = new Rectangle(342, 417, 210, 40);
+        Rectangle fighterBlueRct = new Rectangle(596, 417, 210, 40);
 
         //pdfCanvas.rectangle(dateRct);
         //pdfCanvas.stroke();
@@ -113,28 +114,30 @@ public class W5JudgesListPDF {
 
 
         Paragraph judge1Prg = new Paragraph(judge1Text = firstJudge(fightNumb))
-                .setFont(font)
-                .setFontSize(20)
+                .setFont(fontJudges)
+                .setFontSize(19)
                 .setTextAlignment(TextAlignment.LEFT);
 
 
         Paragraph judge2Prg = new Paragraph(judge2Text = secondJudge(fightNumb))
-                .setFont(font)
-                .setFontSize(20)
+                .setFont(fontJudges)
+                .setFontSize(19)
                 .setTextAlignment(TextAlignment.LEFT);
 
 
         Paragraph judge3Prg = new Paragraph(judge3Text = thridJudge(fightNumb))
-                .setFont(font)
-                .setFontSize(20)
+                .setFont(fontJudges)
+                .setFontSize(19)
                 .setTextAlignment(TextAlignment.LEFT);
 
-        Paragraph fighterRedPrg = new Paragraph(nameRedText = cornerRed(fightNumb))
+        Paragraph fighterRedPrg = new Paragraph(nameRedText = cornerRed(fightNumb).toUpperCase())
+                .setFontColor(Color.WHITE)
                 .setFont(fightersFont)
                 .setFontSize(20)
                 .setTextAlignment(TextAlignment.CENTER);
 
-        Paragraph fighterBluePrg = new Paragraph(nameBlueText = cornerBlue(fightNumb))
+        Paragraph fighterBluePrg = new Paragraph(nameBlueText = cornerBlue(fightNumb).toUpperCase())
+                .setFontColor(Color.WHITE)
                 .setFont(fightersFont)
                 .setFontSize(20)
                 .setTextAlignment(TextAlignment.CENTER);
@@ -149,7 +152,7 @@ public class W5JudgesListPDF {
                 .setFontSize(27)
                 .setTextAlignment(TextAlignment.CENTER);
 
-        Text cityTxt = new Text(cityText = eventPlace(fightNumb) + ", ")
+        Text cityTxt = new Text(cityText = getCity(eventNameForCity(fightNumb)) + ", ")
                 .setFont(font)
                 .setFontSize(23);
 
@@ -193,6 +196,19 @@ public class W5JudgesListPDF {
 
     }
 
+    private static String eventNameForCity(int fightNumb) throws SQLException {
+
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT eventname FROM Fights WHERE fightnumber = "+"'"+(fightNumb+1)+"'");
+        String eventname = null;
+        while(rs.next()) {
+            eventname = rs.getString("eventname");
+        }
+        connection.close();
+        return eventname;
+    }
+
     private static String eventName(int fightNumb) throws SQLException {
 
         Connection connection = W5MySQLConnection.getConnection();
@@ -203,6 +219,10 @@ public class W5JudgesListPDF {
             eventname = rs.getString("eventname");
         }
         connection.close();
+        String[] filter = eventname.split(" ");
+        if (filter[0].equals("W5")) {
+            eventname = eventname.substring(3);
+        }
         return eventname;
     }
 
@@ -308,8 +328,26 @@ public class W5JudgesListPDF {
             weight = rs.getString("weight");
         }
         connection.close();
+        String[] filter = weight.split("\\.");
+        if (filter[1].equals("0")) {
+            weight = filter[0];
+        } else {
+            weight = filter[0]+"."+filter[1];
+        }
         return weight;
     }
 
+
+    private static String getCity(String eventName) throws SQLException {
+        Connection connection = W5MySQLConnection.getConnection();
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT city FROM Tournaments WHERE name = "+ "'"+(eventName)+"'");
+        String city = "";
+        while(rs.next()) {
+            city = rs.getString("city");
+        }
+        connection.close();
+        return city;
+    }
 
 }

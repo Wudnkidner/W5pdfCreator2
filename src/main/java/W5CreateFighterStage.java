@@ -16,6 +16,7 @@ public class W5CreateFighterStage {
 	private static TextField lastNameTFld = new TextField();
 	private static TextField countryTFld = new TextField();
 	private static TextField weightTFild = new TextField();
+	private static W5Search searchFighterName = new W5Search();
 
 	public static void setCreateFighterStage (Stage stage) {
 

@@ -131,16 +131,16 @@ public class W5FightCardPDF {
             Rectangle tournamentRct = new Rectangle(125, 681, 188, 40);
             Rectangle cityRct = new Rectangle(350, 683, 84, 40);
             Rectangle dateRct = new Rectangle(470, 682, 91, 40);
-            Rectangle nameRedRct = new Rectangle(100, 621, 200, 40);
-            Rectangle nationalityRedRct = new Rectangle(100, 594, 200, 40);
-            Rectangle nameBlueRct = new Rectangle(318, 621, 200, 40);
-            Rectangle nationalityBlueRct = new Rectangle(318, 594, 200, 40);
-            Rectangle refereeRct = new Rectangle(120, 360, 258, 40);
-            Rectangle refereeNationRct = new Rectangle(430, 360, 122, 40);
-            Rectangle judgeRct = new Rectangle(120, 315, 258, 40);
-            Rectangle judgeNationRct = new Rectangle(430, 315, 122, 40);
+            Rectangle nameRedRct = new Rectangle(115, 621, 185, 40);
+            Rectangle nationalityRedRct = new Rectangle(125, 594, 175, 40);
+            Rectangle nameBlueRct = new Rectangle(335, 621, 183, 40);
+            Rectangle nationalityBlueRct = new Rectangle(335, 594, 153, 40);
+            Rectangle refereeRct = new Rectangle(120, 362, 258, 40);
+            Rectangle refereeNationRct = new Rectangle(430, 362, 122, 40);
+            Rectangle judgeRct = new Rectangle(120, 317, 258, 40);
+            Rectangle judgeNationRct = new Rectangle(430, 317, 122, 40);
 
-            //pdfCanvas.rectangle(judgeNationRct);
+            //pdfCanvas.rectangle(nationalityRedRct);
             //pdfCanvas.stroke();
 
             Canvas weightCategoryCnvs = new Canvas(pdfCanvas, pdfDoc, weightCategoryRct);
@@ -164,7 +164,7 @@ public class W5FightCardPDF {
             Paragraph tournament = new Paragraph(tournamentText = eventNameList.get(fightNumb))
                     .setFont(font)
                     .setFontSize(15)
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.LEFT);
 
             Paragraph city = new Paragraph(cityText = getCity(eventNameList.get(fightNumb)))
                     .setFont(font)
@@ -180,25 +180,25 @@ public class W5FightCardPDF {
                     .setFont(font_name)
                     .setFontSize(17)
                     .setFontColor(MYRED)
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.LEFT);
 
             Paragraph nationalityRed = new Paragraph(nationalityRedText = countryRedList.get(fightNumb))
                     .setFont(font_name)
                     .setFontSize(14)
                     .setFontColor(MYRED)
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.LEFT);
 
             Paragraph nameBlue = new Paragraph(nameBlueText = cornerBlueList.get(fightNumb))
                     .setFont(font_name)
                     .setFontSize(17)
                     .setFontColor(MYBLUE)
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.LEFT);
 
             Paragraph nationalityBlue = new Paragraph(nationalityBlueText = countryBlueList.get(fightNumb))
                     .setFont(font_name)
                     .setFontSize(14)
                     .setFontColor(MYBLUE)
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.LEFT);
 
             Paragraph referee = new Paragraph(refereeText = refereeList.get(fightNumb))
                     .setFont(font_judge)
@@ -289,6 +289,12 @@ public class W5FightCardPDF {
             weight = rs.getString("weight");
         }
         connection.close();
+        String[] filter = weight.split("\\.");
+        if (filter[1].equals("0")) {
+            weight = filter[0];
+        } else {
+            weight = filter[0]+"."+filter[1];
+        }
         return weight;
     }
 
